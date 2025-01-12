@@ -1,0 +1,39 @@
+import findUnits from "./eslint-plugins/find-units.js";
+import firstPlugin from "./eslint-plugins/first-plugin.js";
+import LOC from "./eslint-plugins/loc.js";
+import noBranches from "./eslint-plugins/no-branches.js";
+import containsAsync from "./eslint-plugins/contains-async.js";
+import containsDynamicTyping from "./eslint-plugins/contains-dynamic-typing.js";
+import containsDomInteraction from "./eslint-plugins/contains-dom.js";
+import containsNestedFunction from "./eslint-plugins/contains-nested-function.js";
+import containsHigherOrder from "./eslint-plugins/contains-higher-order.js";
+import complexity from "eslint-plugin-complexity";
+// todo better names for rules
+export default [
+  {
+    plugins: {
+      "find-units": findUnits,
+      complexity,
+      "first-plugin": firstPlugin,
+      "LOC": LOC,
+      "no-branches": noBranches,
+      "contains-async": containsAsync,
+      "contains-dynamic-typing": containsDynamicTyping,
+      "contains-dom": containsDomInteraction,
+      "contains-nested-function": containsNestedFunction,
+      "contains-higher-order": containsHigherOrder,
+    },
+    rules: {
+      "find-units/find-units": "warn",   // Contains promise
+      "complexity": ["error", { "max": 0 }], // Cyclomatic complexity
+      "LOC/LOC": "error", // Lines of code
+      "no-branches/count-branches": "error", // Number of branches
+      "first-plugin/max-params": ["warn", 1],   // No of params
+      "contains-async/find-async": "error",   // Contains asynchronous behaviour
+      "contains-dynamic-typing/find-dynamic-typing": "error",   // Contains dynamic typing (let, var, const)
+      "contains-dom/find-dom-interaction": "error",   // Contains dom interaction
+      "contains-nested-function/find-nested-function": "error",   // Contains a nested function
+      "contains-higher-order/find-higher-order": "error",   // Contains a higher order function
+    },
+  },
+];

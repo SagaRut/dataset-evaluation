@@ -1,0 +1,34 @@
+/**
+ * Helper function to get all enclosing named contexts
+ */
+export function getEnclosingContexts(node) {
+    const contexts = [];
+    let current = node;
+
+    while (current) {
+        if (
+            current.type === "FunctionDeclaration" ||
+            current.type === "FunctionExpression" ||
+            current.type === "ArrowFunctionExpression"
+        ) {
+            if (current.id && current.id.name) {
+                contexts.push(`function '${current.id.name}'`);
+            } else {
+                contexts.push("anonymous function");
+            }
+        } else if (current.type === "ClassDeclaration") {
+            if (current.id && current.id.name) {
+                contexts.push(`class '${current.id.name}'`);
+            } else {
+                contexts.push("anonymous class");
+            }
+        } else if (current.type === "MethodDefinition") {
+            if (current.key && current.key.name) {
+                contexts.push(`method '${current.key.name}'`);
+            }
+        }
+        current = current.parent;
+    }
+
+    return contexts.reverse().join(" > ");
+}
