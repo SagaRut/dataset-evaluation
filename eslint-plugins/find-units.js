@@ -24,10 +24,19 @@ export default {
           ExportNamedDeclaration(node) {
             if (node.declaration) {
               if (node.declaration.type === "VariableDeclaration") {
-                // Handle `export const validateSameShape = () => {...}`
+                // Handle `export const foo = () => {...}` and similar cases
                 node.declaration.declarations.forEach((decl) => {
                   if (decl.id.type === "Identifier") {
-                    reportExport(node, "Named", decl.id.name);
+                    // Check if the initializer is a function or callable
+                    const isFunction =
+                      decl.init &&
+                      (decl.init.type === "ArrowFunctionExpression" ||
+                       decl.init.type === "FunctionExpression");
+
+                    // Only report if the initializer is a function
+                    if (isFunction) {
+                      reportExport(node, "Named", decl.id.name);
+                    }
                   }
                 });
               } else if (node.declaration.type === "FunctionDeclaration") {
@@ -51,8 +60,10 @@ export default {
                 : "anonymous");
             reportExport(node, "Default", name);
           },
-          // Covers exports.foo = function...
+          // Covers exports.foo = ...
           // Covers module.exports = ...
+          // Covers ... = exports
+          // Covers ... = module.exports
           AssignmentExpression(node) {
             if (
               node.left.type === "MemberExpression" &&
@@ -130,14 +141,20 @@ export default {
             }
           },
           // Covers var ... = exports
+          // Covers var ... = module.exports
           VariableDeclarator(node) {
-            // Detect any assignment where `... = exports` TODO may need more edge cases
+            // Detect any assignment where `... = exports` or `... = module.exports`
             if (
-              node.init && ((
-              node.init.type === "Identifier" &&
-              node.init.name === "exports") || ( // Right side is `exports`
-              node.init.type === "AssignmentExpression" &&
-              node.init.left.name === "exports")) && // Right side is `exports`
+              node.init && (
+                // Right side is `exports`
+                (node.init.type === "Identifier" && node.init.name === "exports") ||
+                // Right side is `module.exports`
+                (node.init.type === "MemberExpression" &&
+                  node.init.object.type === "Identifier" &&
+                  node.init.object.name === "module" &&
+                  node.init.property.type === "Identifier" &&
+                  node.init.property.name === "exports")
+              ) &&
               node.id.type === "Identifier" && // Left side is a variable
               node.id.name // Ensure the variable name exists (e.g., "app")
             ) {
