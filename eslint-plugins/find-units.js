@@ -51,21 +51,24 @@ export default {
                 : "anonymous");
             reportExport(node, "Default", name);
           },
-
+          // Covers exports.foo = function...
+          // Covers module.exports = ...
           AssignmentExpression(node) {
             if (
               node.left.type === "MemberExpression" &&
               node.left.object.name === "module" &&
               node.left.property.name === "exports"
             ) {
-              // Detect `module.exports = ...`
+              // Handle `module.exports = ...`
               const name =
                 node.right.type === "Identifier"
-                  ? node.right.name // For `module.exports = View;`
+                  ? node.right.name
                   : node.right.type === "FunctionExpression" ||
                     node.right.type === "ArrowFunctionExpression"
                   ? node.right.id?.name || "anonymous function"
-                  : null;
+                  : null; // Skip non-function types
+
+              // Only report if a named export is found
               if (name) {
                 reportExport(node, "CommonJS", name);
               }
@@ -73,56 +76,73 @@ export default {
               node.left.type === "MemberExpression" &&
               node.left.object.name === "exports"
             ) {
-              // Detect `exports.something = ...`
-              const propertyName = node.left.property.name || "unknown";
-              const rightName =
+              // Handle `exports.foo = ...` or `exports.compileETag = ...`
+              const propertyName = node.left.property.name;
+              let rightName = null;
+
+              if (node.right.type === "Identifier") {
+                rightName = node.right.name; // Extract named identifier
+              } else if (
                 node.right.type === "FunctionExpression" ||
                 node.right.type === "ArrowFunctionExpression"
-                  ? node.right.id?.name || `anonymous function`
-                  : null;
+              ) {
+                rightName = node.right.id ? node.right.id.name : "anonymous function"; // Handle function assignment
+              }
+
+              // Report the export only if a function or named identifier is found
               if (rightName) {
-                reportExport(
-                  node,
-                  "CommonJS",
-                  `${propertyName} (${rightName})`
-                );
+                reportExport(node, "CommonJS", `${propertyName} (${rightName})`);
+              }
+            } else if (
+              node.right.type === "MemberExpression" &&
+              node.right.object.name === "module" &&
+              node.right.property.name === "exports"
+            ) {
+              // Handle `... = module.exports`
+              const name =
+                node.left.type === "Identifier"
+                  ? node.left.name
+                  : node.left.type === "MemberExpression" &&
+                    node.left.object.name === "exports"
+                  ? `${node.left.object.name}.${node.left.property.name}`
+                  : null; // Skip anonymous exports
+
+              // Only report if a named export is found
+              if (name) {
+                reportExport(node, "CommonJS", `${name} (alias of module.exports)`);
+              }
+            } else if (
+              node.right.type === "Identifier" &&
+              node.right.name === "exports"
+            ) {
+              // Handle `... = exports`
+              const name =
+                node.left.type === "Identifier"
+                  ? node.left.name
+                  : node.left.type === "MemberExpression"
+                  ? `${node.left.object.name}.${node.left.property.name}`
+                  : null; // Skip anonymous exports
+
+              // Only report if a named export is found
+              if (name) {
+                reportExport(node, "CommonJS", `${name} (alias of exports)`);
               }
             }
           },
-
+          // Covers var ... = exports
           VariableDeclarator(node) {
-            // Handle cases like: `exports.compileETag = function(val) { ... }`
+            // Detect any assignment where `... = exports` TODO may need more edge cases
             if (
-              node.init &&
-              node.init.type === "FunctionExpression" &&
-              node.id.type === "MemberExpression" &&
-              node.id.object.name === "exports"
+              node.init && ((
+              node.init.type === "Identifier" &&
+              node.init.name === "exports") || ( // Right side is `exports`
+              node.init.type === "AssignmentExpression" &&
+              node.init.left.name === "exports")) && // Right side is `exports`
+              node.id.type === "Identifier" && // Left side is a variable
+              node.id.name // Ensure the variable name exists (e.g., "app")
             ) {
-              const propertyName = node.id.property.name || null;
-              if (propertyName) {
-                reportExport(node, "CommonJS", propertyName);
-              }
-            }
-          },
-
-          FunctionDeclaration(node) {
-            // Handle cases like: `function View(name, options) { ... }` followed by `module.exports = View;`
-            const parent = node.parent;
-            if (
-              parent &&
-              parent.type === "Program" &&
-              parent.body.some(
-                (stmt) =>
-                  stmt.type === "ExpressionStatement" &&
-                  stmt.expression.type === "AssignmentExpression" &&
-                  stmt.expression.left.type === "MemberExpression" &&
-                  stmt.expression.left.object.name === "module" &&
-                  stmt.expression.left.property.name === "exports" &&
-                  stmt.expression.right.type === "Identifier" &&
-                  stmt.expression.right.name === node.id.name
-              )
-            ) {
-              reportExport(node, "CommonJS", node.id.name);
+              const variableName = node.id.name;
+              reportExport(node, "CommonJS", variableName);
             }
           },
         };
