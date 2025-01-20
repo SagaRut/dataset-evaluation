@@ -145,16 +145,16 @@ export default {
           VariableDeclarator(node) {
             // Detect any assignment where `... = exports` or `... = module.exports`
             if (
-              node.init && (
-                // Right side is `exports`
-                (node.init.type === "Identifier" && node.init.name === "exports") ||
-                // Right side is `module.exports`
-                (node.init.type === "MemberExpression" &&
-                  node.init.object.type === "Identifier" &&
-                  node.init.object.name === "module" &&
-                  node.init.property.type === "Identifier" &&
-                  node.init.property.name === "exports")
-              ) &&
+              node.init && (((
+              node.init.type === "Identifier" &&
+              node.init.name === "exports") || ( // Right side is `exports` as identifier
+              node.init.type === "AssignmentExpression" &&
+              node.init.left.name === "exports")) || ( // Right side is `exports` as assignment expression
+              node.init.type === "MemberExpression" &&
+              node.init.object.type === "Identifier" &&
+              node.init.object.name === "module" &&
+              node.init.property.type === "Identifier" &&
+              node.init.property.name === "exports" )) && // Right side is `module.exports`
               node.id.type === "Identifier" && // Left side is a variable
               node.id.name // Ensure the variable name exists (e.g., "app")
             ) {
