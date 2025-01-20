@@ -18,14 +18,31 @@ export default {
         };
 
         return {
+          // Covers export { foo, bar }
+          // Covers export const foo = () => {...}
+          // Covers export function foo() {...}
           ExportNamedDeclaration(node) {
-            const name =
-              node.declaration?.id?.name || // For named exports like `export const x = ...`
-              node.declaration?.declarations?.[0]?.id?.name || // For `export let/const/var x = ...`
-              "anonymous";
-            reportExport(node, "Named", name);
+            if (node.declaration) {
+              if (node.declaration.type === "VariableDeclaration") {
+                // Handle `export const validateSameShape = () => {...}`
+                node.declaration.declarations.forEach((decl) => {
+                  if (decl.id.type === "Identifier") {
+                    reportExport(node, "Named", decl.id.name);
+                  }
+                });
+              } else if (node.declaration.type === "FunctionDeclaration") {
+                // Handle `export function foo() {...}`
+                reportExport(node, "Named", node.declaration.id.name);
+              }
+            } else if (node.specifiers) {
+              // Handle `export { foo, bar }`
+              node.specifiers.forEach((specifier) => {
+                const name = specifier.exported.name;
+                reportExport(node, "Named", name);
+              });
+            }
           },
-
+          // Covers export default foo
           ExportDefaultDeclaration(node) {
             const name =
               node.declaration?.id?.name || // For `export default function x() {}` or `export default class X {}`
