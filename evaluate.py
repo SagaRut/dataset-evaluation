@@ -75,8 +75,13 @@ def run_eslint_on_files(files):
                         if message["ruleId"] == "LOC/LOC":
                             unit = re.search(r"Unit\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             loc = re.search(r"has (\d+)", message["message"])
+                            object = re.search(r"object\s+'([a-zA-Z_$][\w$]*)", message["message"])
                             if unit and loc:
-                                # Add the unit name as the key and LOC value as the value
+                                # If the unit is linked to an object add the loc to the object loc
+                                if object:
+                                    current_loc = eslint_result["LOC"].get(object.group(1), 0)
+                                    eslint_result["LOC"][object.group(1)] = current_loc + int(loc.group(1))
+                                # Otherwise add the unit name as the key and LOC value as the value
                                 eslint_result["LOC"][unit.group(1)] = int(loc.group(1))
                         if message["ruleId"] == "complexity":
                             unit = re.search(r"Function\s+'([a-zA-Z_$][\w$]*)'", message["message"])
