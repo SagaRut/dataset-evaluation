@@ -62,6 +62,7 @@ export default {
           },
           // Covers exports.foo = ...
           // Covers module.exports = ...
+          // Covers module.exports.foo = ...
           // Covers ... = exports
           // Covers ... = module.exports
           AssignmentExpression(node) {
@@ -99,6 +100,28 @@ export default {
               ) {
                 rightName = node.right.id ? node.right.id.name : "anonymous function"; // Handle function assignment
               }
+
+              // Report the export only if a function or named identifier is found
+              if (rightName) {
+                reportExport(node, "CommonJS", `${propertyName} (${rightName})`);
+              }
+            }
+            else if (
+              node.left.type === "MemberExpression" &&
+              node.left.object.type === "MemberExpression" &&
+              node.left.object.object.name === "module" &&
+              node.left.object.property.name === "exports"
+            ) {
+              // Handle `module.exports.foo = ...`
+              const propertyName = node.left.property.name;
+
+              const rightName =
+                node.right.type === "Identifier"
+                  ? node.right.name
+                  : node.right.type === "FunctionExpression" ||
+                    node.right.type === "ArrowFunctionExpression"
+                  ? node.right.id?.name || "anonymous function"
+                  : null;
 
               // Report the export only if a function or named identifier is found
               if (rightName) {

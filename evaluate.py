@@ -13,7 +13,6 @@ ESLINT_CONFIG = "eslint.config.js"
 # Todo setup JS feature
 # TODO rest of JS features, finna instance, fyrst og gera evaluation á complexity miðað við það/coverage af hlutum?
 # TODO rest af hlutum sem Mitchell talaði um
-# Todo Skoða TestPilot/CoPilot og SynTest setup
 # Todo Gera lista af benchmarks sem ég ætla að evaluate-a
 # Todo Fá niðurstöður úr eh benchmarks
 # Todo function, class, method, hvað er eigilega unit? finna cc fyrir allt?
@@ -25,7 +24,10 @@ def install_eslint_and_plugins():
     try:
         print("Checking and installing ESLint and plugins...")
         subprocess.run(["npm", "install", "-g", "eslint"], check=True, shell=True)
-        print("Installing complexity plugin.")
+        # npm install --save-dev eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin
+        print("Installing the typescript parser.")
+        subprocess.run(["npm", "install", "eslint", "@typescript-eslint/parser", "--save-dev"], check=True, shell=True)
+        print("Installing the complexity plugin.")
         subprocess.run(["npm", "install", "eslint-plugin-complexity", "--save-dev"], check=True, shell=True)
         print("ESLint and plugins installed successfully.")
     except subprocess.CalledProcessError as e:
@@ -63,15 +65,21 @@ def run_eslint_on_files(files):
                     eslint_result["JS:DomInteraction"] = {}
                     eslint_result["JS:NestedFunction"] = {}
                     eslint_result["JS:HigherOrder"] = {}
+                    eslint_result["JS:CommonJS"] = {}
+                    eslint_result["JS:Closures"] = {}
+                    eslint_result["JS:Prototype"] = {}
 
                     # Find exported units
                     for message in eslint_result["messages"]:
                         # Find exported units
                         if message["ruleId"] == "find-units/find-units":
                             unit = re.search(r"found:\s+([a-zA-Z_$][\w$]*)", message["message"])
+                            commonJS = re.search(r"CommonJS", message["message"])
                             if unit:
                                 # Append the matched unit to the list
                                 eslint_result["exportedUnits"].append(unit.group(1))
+                                if commonJS:
+                                    eslint_result["JS:CommonJS"][unit.group(1)] = 1
                         if message["ruleId"] == "LOC/LOC":
                             unit = re.search(r"Unit\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             loc = re.search(r"has (\d+)", message["message"])
@@ -90,30 +98,45 @@ def run_eslint_on_files(files):
                                 # Add the unit name as the key and CC value as the value
                                 eslint_result["CC"][unit.group(1)] = int(cc.group(1))
                         if message["ruleId"] == "contains-async/find-async":
-                            unit = re.search(r"function\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:function|object)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
                                 # Add the unit name as the key
                                 eslint_result["JS:Async"][unit.group(1)] = 1
                         if message["ruleId"] == "contains-dynamic-typing/find-dynamic-typing":
-                            unit = re.search(r"function\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:function|object)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
                                 # Add the unit name as the key
                                 eslint_result["JS:DynamicTyping"][unit.group(1)] = 1
                         if message["ruleId"] == "contains-dom/find-dom-interaction":
-                            unit = re.search(r"function\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:function|object)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
                                 # Add the unit name as the key
                                 eslint_result["JS:DomInteraction"][unit.group(1)] = 1
                         if message["ruleId"] == "contains-nested-function/find-nested-function":
-                            unit = re.search(r"function\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:function|object)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
                                 # Add the unit name as the key
                                 eslint_result["JS:NestedFunction"][unit.group(1)] = 1
                         if message["ruleId"] == "contains-higher-order/find-higher-order":
-                            unit = re.search(r"function\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:function|object)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
                                 # Add the unit name as the key
                                 eslint_result["JS:HigherOrder"][unit.group(1)] = 1
+                        if message["ruleId"] == "contains-commonjs/find-commonjs":
+                            unit = re.search(r"(?:function|object)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            if unit:
+                                # Add the unit name as the key
+                                eslint_result["JS:CommonJS"][unit.group(1)] = 1
+                        if message["ruleId"] == "contains-closures/find-closures":
+                            unit = re.search(r"(?:function|object)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            if unit:
+                                # Add the unit name as the key
+                                eslint_result["JS:Closures"][unit.group(1)] = 1
+                        if message["ruleId"] == "contains-prototype/find-prototype":
+                            unit = re.search(r"(?:function|object)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            if unit:
+                                # Add the unit name as the key
+                                eslint_result["JS:Prototype"][unit.group(1)] = 1
                     # Add the updated result to results list
                     results.append(eslint_result)
             else:
@@ -133,6 +156,9 @@ def reformat_data(results):
             domInteraction = result["JS:DomInteraction"].get(unit, 0)  # Default to 0 if not found
             nestedFunction = result["JS:NestedFunction"].get(unit, 0)  # Default to 0 if not found
             higherOrder = result["JS:HigherOrder"].get(unit, 0)  # Default to 0 if not found
+            commonJS = result["JS:CommonJS"].get(unit, 0)  # Default to 0 if not found
+            closures = result["JS:Closures"].get(unit, 0)  # Default to 0 if not found
+            prototype = result["JS:Prototype"].get(unit, 0)  # Default to 0 if not found
             # Add to JSON data
             json_data.append({
                 "Project": result["project"],
@@ -144,7 +170,10 @@ def reformat_data(results):
                 "JS:DynamicTyping": dynamicTyping,
                 "JS:DomInteraction": domInteraction,
                 "JS:NestedFunction": nestedFunction,
-                "JS:HigherOrder": higherOrder
+                "JS:HigherOrder": higherOrder,
+                "JS:CommonJS": commonJS,
+                "JS:Closures": closures,
+                "JS:Prototype": prototype
             })
     return json_data
 
@@ -158,7 +187,8 @@ def save_results_to_file(results, reformatted_results, json_file, csv_file):
         writer = csv.writer(f)
         writer.writerow(["Project", "File", "Unit", "LOC", "CC",
                          "JS:Async", "JS:DynamicTyping", "JS:DomInteraction",
-                         "JS:NestedFunction", "JS:HigherOrder"])
+                         "JS:NestedFunction", "JS:HigherOrder", "JS:CommonJS",
+                         "JS:Closures", "JS:Prototype"])
         for result in reformatted_results:
             writer.writerow([
                 result["Project"],
@@ -171,6 +201,9 @@ def save_results_to_file(results, reformatted_results, json_file, csv_file):
                 result["JS:DomInteraction"],
                 result["JS:NestedFunction"],
                 result["JS:HigherOrder"],
+                result["JS:CommonJS"],
+                result["JS:Closures"],
+                result["JS:Prototype"],
             ])
     print(f"Results saved to {csv_file}")
 
@@ -236,7 +269,7 @@ def main():
             files = [
                 os.path.join(root, file)
                 for root, _, filenames in os.walk(project_path)
-                for file in filenames if file.endswith(".js")
+                for file in filenames if (file.endswith(".js") or file.endswith(".ts"))
             ]
             print(f"Found {len(files)} files in project: {project_path}")
 

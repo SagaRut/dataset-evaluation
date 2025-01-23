@@ -7,13 +7,20 @@ import containsDynamicTyping from "./eslint-plugins/contains-dynamic-typing.js";
 import containsDomInteraction from "./eslint-plugins/contains-dom.js";
 import containsNestedFunction from "./eslint-plugins/contains-nested-function.js";
 import containsHigherOrder from "./eslint-plugins/contains-higher-order.js";
-import containsCommonJS from "./eslint-plugins/contains-commonjs.js";
-import containsClosures from "./eslint-plugins/contains-closures.js";
-import containsPrototype from "./eslint-plugins/contains-prototype.js";
 import complexity from "eslint-plugin-complexity";
+import tseslint from 'typescript-eslint';
+import tsParser from "@typescript-eslint/parser";
 // todo better names for rules
-export default [
+export default tseslint.config([
   {
+    files: ["**/*.ts", "**/*.tsx"], // Apply to TypeScript files
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: "latest", // Use the latest ECMAScript version
+        sourceType: "module", // Use 'module' for ES modules
+      },
+    },
     plugins: {
       "find-units": findUnits,
       complexity,
@@ -25,9 +32,6 @@ export default [
       "contains-dom": containsDomInteraction,
       "contains-nested-function": containsNestedFunction,
       "contains-higher-order": containsHigherOrder,
-      "contains-commonjs": containsCommonJS,
-      "contains-closures": containsClosures,
-      "contains-prototype": containsPrototype,
     },
     rules: {
       "find-units/find-units": "warn",   // Contains promise
@@ -40,9 +44,6 @@ export default [
       "contains-dom/find-dom-interaction": "error",   // Contains dom interaction
       "contains-nested-function/find-nested-function": "error",   // Contains a nested function
       "contains-higher-order/find-higher-order": "error",   // Contains a higher order function
-      "contains-commonjs/find-commonjs": "error",   // Contains CommonJS
-      "contains-closures/find-closures": "error",   // Contains closures
-      "contains-prototype/find-prototype": "error",   // Contains prototype usage
     },
   },
-];
+]);

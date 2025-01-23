@@ -26,6 +26,15 @@ export function getEnclosingContexts(node) {
             if (current.key && current.key.name) {
                 contexts.push(`method '${current.key.name}'`);
             }
+        } else if (
+            current.type === "AssignmentExpression" &&
+            current.left.type === "MemberExpression" &&
+            current.left.object &&
+            current.left.object.type === "Identifier" &&
+            current.left.property &&
+            current.left.property.type === "Identifier"
+        ) {
+            contexts.push(`object '${current.left.object.name}' property '${current.left.property.name}'`);
         }
         current = current.parent;
     }
