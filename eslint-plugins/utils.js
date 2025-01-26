@@ -13,6 +13,10 @@ export function getEnclosingContexts(node) {
         ) {
             if (current.id && current.id.name) {
                 contexts.push(`function '${current.id.name}'`);
+            } else if (current.parent && current.parent.type === "VariableDeclarator") {
+                // Arrow function assigned to a variable
+                const varName = current.parent.id.name;
+                contexts.push(`variable '${varName}' arrow function`);
             } else {
                 contexts.push("anonymous function");
             }

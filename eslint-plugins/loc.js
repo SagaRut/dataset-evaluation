@@ -38,6 +38,20 @@ export default {
           return null;
         }
 
+        // Helper function to find class name in method
+        function getClassName(node) {
+          let className = null;
+          let currentNode = node.parent;
+          while (currentNode) {
+            if (currentNode.type === "ClassDeclaration") {
+              className = currentNode.id ? currentNode.id.name : "anonymous";
+              break;
+            }
+            currentNode = currentNode.parent;
+          }
+          return className;
+        }
+
         return {
           // For function declarations
           FunctionDeclaration(node) {
@@ -48,6 +62,12 @@ export default {
           ClassDeclaration(node) {
             const className = node.id ? node.id.name : "anonymous";
             reportLOC(node, className);
+          },
+          // For method declarations inside a class
+          MethodDefinition(node) {
+            const className = getClassName(node); // Get class name for method
+            const methodName = node.key ? node.key.name : "anonymous";
+            reportLOC(node, methodName, className); // Report method LOC with class name
           },
           // For variable declarations (e.g., var req = Object.create(...))
           VariableDeclarator(node) {

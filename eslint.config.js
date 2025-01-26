@@ -10,6 +10,7 @@ import containsHigherOrder from "./eslint-plugins/contains-higher-order.js";
 import containsCommonJS from "./eslint-plugins/contains-commonjs.js";
 import containsClosures from "./eslint-plugins/contains-closures.js";
 import containsPrototype from "./eslint-plugins/contains-prototype.js";
+import containsPropertyAccess from "./eslint-plugins/contains-property-access.js";
 import complexity from "eslint-plugin-complexity";
 // todo better names for rules
 export default [
@@ -28,6 +29,7 @@ export default [
       "contains-commonjs": containsCommonJS,
       "contains-closures": containsClosures,
       "contains-prototype": containsPrototype,
+      "contains-property-access": containsPropertyAccess,
     },
     rules: {
       "find-units/find-units": "warn",   // Contains promise
@@ -43,6 +45,7 @@ export default [
       "contains-commonjs/find-commonjs": "error",   // Contains CommonJS
       "contains-closures/find-closures": "error",   // Contains closures
       "contains-prototype/find-prototype": "error",   // Contains prototype usage
+      "contains-property-access/find-object-property-access": "error",   // Contains object property access from function parameters
     },
   },
 ];
