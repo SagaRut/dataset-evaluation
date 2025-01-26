@@ -4,9 +4,10 @@ import json
 import csv
 import re
 
-# Path to the ESLint config file
 ESLINT_CONFIG = "eslint.config.js"
+ESLINT_TYPESCRIPT_CONFIG = "eslint-ts.config.js"
 OUTPUT_DIR = "results"
+BENCHMARK = "TestPilot-Benchmark"
 
 # Only evaluate units that are exported
 # Todo how to evaluate cyclomatic complexity of units that are exported classes?
@@ -20,6 +21,11 @@ OUTPUT_DIR = "results"
 # TODO set up eslint properly w package.json
 
 # TODO add a part where it clones the repos by itself, have a list of files to include???
+
+# TODO add number of units per project!!!
+# TODO fix CC calculations for TestPilot benchmark - zip-a-folder and image-downloaded and prob some more!!!
+# TODO look into missing projects from TestPilot benchmark - its typescript
+
 def install_eslint_and_plugins():
     """Ensure ESLint and required plugins are installed."""
     try:
@@ -40,13 +46,24 @@ def run_eslint_on_files(project, files):
     results = []
     for file in files:
         try:
-            print(f"Running ESLint on {file}")
-            result = subprocess.run(
-                ["npx", "eslint", file, "--config", ESLINT_CONFIG, "--format", "json"],
-                capture_output=True,
-                text=True,
-                shell=True
-            )
+            print(f"Running ESLint on JavaScript file: {file}")
+            # Check if the file ends with '.js'
+            if file.endswith(".js"):
+                print(f"Running ESLint on JavaScript file: {file}")
+                result = subprocess.run(
+                    ["npx", "eslint", file, "--config", ESLINT_CONFIG, "--format", "json"],
+                    capture_output=True,
+                    text=True,
+                    shell=True
+                )
+            elif file.endswith(".ts"):
+                print(f"Running ESLint on TypeScript file: {file}")
+                result = subprocess.run(
+                    ["npx", "eslint", file, "--config", ESLINT_TYPESCRIPT_CONFIG, "--format", "json"],
+                    capture_output=True,
+                    text=True,
+                    shell=True
+                )
             if result.stdout:
                 eslint_results = json.loads(result.stdout)
                 for eslint_result in eslint_results:
@@ -288,14 +305,11 @@ def main():
     # Ensure npm packages are installed
     install_eslint_and_plugins()
 
-    # Directory containing projects
-    project_dir = "JS-projects"
-
     all_results = []
 
     # Iterate over projects in the directory
-    for project in os.listdir(project_dir):
-        project_path = os.path.join(project_dir, project)
+    for project in os.listdir(BENCHMARK):
+        project_path = os.path.join(BENCHMARK, project)
         if os.path.isdir(project_path):
             print(f"Processing project: {project_path}")
 
@@ -312,13 +326,13 @@ def main():
             reformatted_results = reformat_data(results)
             all_results.extend(reformatted_results)
 
-            json_file = f"eslint_results_{project}.json"
-            csv_file = f"eslint_results_{project}.csv"
+            json_file = f"eslint_results_{BENCHMARK}_{project}.json"
+            csv_file = f"eslint_results_{BENCHMARK}_{project}.csv"
             save_results_to_file(results, reformatted_results, json_file, csv_file)
     # Calculate averages across all projects
     averages = calculate_average_results(all_results)
     # Save average results
-    save_averages_to_file(averages, "average_results.json", "average_results.csv")
+    save_averages_to_file(averages, f"average_results_{BENCHMARK}.json", f"average_results_{BENCHMARK}.csv")
 
 if __name__ == "__main__":
     main()
