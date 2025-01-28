@@ -10,21 +10,16 @@ OUTPUT_DIR = "results"
 BENCHMARK = "TestPilot-Benchmark"
 
 # Only evaluate units that are exported
-# Todo how to evaluate cyclomatic complexity of units that are exported classes?
-# Todo How does the llm eval plugin find units, also classes??
-# Todo setup JS feature
+# Todo How does the eval plugin find units, also classes?? Finds functions and methods not classes
 # TODO rest of JS features, finna instance, fyrst og gera evaluation á complexity miðað við það/coverage af hlutum?
 # TODO rest af hlutum sem Mitchell talaði um
 # Todo Gera lista af benchmarks sem ég ætla að evaluate-a
-# Todo Fá niðurstöður úr eh benchmarks
-# Todo function, class, method, hvað er eigilega unit? finna cc fyrir allt?
 # TODO set up eslint properly w package.json
 
 # TODO add a part where it clones the repos by itself, have a list of files to include???
 
-# TODO add number of units per project!!!
-# TODO fix CC calculations for TestPilot benchmark - zip-a-folder and image-downloaded and prob some more!!!
-# TODO look into missing projects from TestPilot benchmark - its typescript
+# TODO look into adding CC of global scope functions if they are used in the unit!
+# TODO fix that it only queries files ending with .js and .ts. Should also cover for example mjs, tsx etc...
 
 def install_eslint_and_plugins():
     """Ensure ESLint and required plugins are installed."""
@@ -114,7 +109,7 @@ def run_eslint_on_files(project, files):
                                 # Otherwise add the unit name as the key and LOC value as the value
                                 eslint_result["LOC"][unit.group(1)] = int(loc.group(1))
                         if message["ruleId"] == "complexity":
-                            unit = re.search(r"(?:Function|Method)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:Function|Method|Static method|Static async method)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             cc = re.search(r"complexity of (\d+)", message["message"])
                             if unit and cc:
                                 # Add the unit name as the key and CC value as the value
@@ -189,7 +184,7 @@ def reformat_data(results):
     for result in results:
         for unit in result["exportedUnits"]:
             loc = result["LOC"].get(unit, 0)  # Default LOC to 0 if not found
-            cc = result["CC"].get(unit, 1)  # Default CC to 1 if not found
+            cc = result["CC"].get(unit, 1) or 1  # Default CC to 1 if not found or if CC is 0
             asyncFound = result["JS:Async"].get(unit, 0)  # Default to 0 if not found
             dynamicTyping = result["JS:DynamicTyping"].get(unit, 0)  # Default to 0 if not found
             domInteraction = result["JS:DomInteraction"].get(unit, 0)  # Default to 0 if not found
@@ -278,11 +273,13 @@ def calculate_average_results(results):
     for project, metrics in project_data.items():
         avg_loc = sum(metrics["LOC"]) / len(metrics["LOC"])
         avg_cc = sum(metrics["CC"]) / len(metrics["CC"])
+        no_of_units = len(metrics["LOC"])
         avg_noJSFeatures = sum(metrics["JSFeatures"]) / len(metrics["JSFeatures"])
         avg_noTSFeatures = sum(metrics["TSFeatures"]) / len(metrics["TSFeatures"])
         averages.append({"Project": project,
                          "Average LOC": avg_loc,
                          "Average CC": avg_cc,
+                         "Number of units": no_of_units,
                          "Average Number of JS Features": avg_noJSFeatures,
                          "Average Number of TS Features": avg_noTSFeatures},)
 
@@ -297,7 +294,7 @@ def save_averages_to_file(averages, json_file, csv_file):
 
     # Save to CSV
     with open(os.path.join(OUTPUT_DIR, csv_file), "w", newline="") as cf:
-        writer = csv.DictWriter(cf, fieldnames=["Project", "Average LOC", "Average CC", "Average Number of JS Features", "Average Number of TS Features"])
+        writer = csv.DictWriter(cf, fieldnames=["Project", "Average LOC", "Average CC", "Number of units", "Average Number of JS Features", "Average Number of TS Features"])
         writer.writeheader()
         writer.writerows(averages)
 
@@ -317,6 +314,7 @@ def main():
             files = [
                 os.path.join(root, file)
                 for root, _, filenames in os.walk(project_path)
+                if 'dist' not in root and 'test' not in root  # Ignore 'dist' and 'test' directories
                 for file in filenames if (file.endswith(".js") or file.endswith(".ts"))
             ]
             print(f"Found {len(files)} files in project: {project_path}")

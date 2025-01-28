@@ -32,6 +32,8 @@ def analyze_benchmark(directory):
                 "Completeness": completeness,
                 "Avg LOC": dataset_summary.loc["mean", "Average LOC"] if "Average LOC" in dataset_summary else None,
                 "Avg CC": dataset_summary.loc["mean", "Average CC"] if "Average CC" in dataset_summary else None,
+                "Total Units": dataset_summary.loc["count", "Average CC"]*dataset_summary.loc["mean", "Number of units"] if "Number of units" in dataset_summary else None,
+                "Avg number of Units": dataset_summary.loc["mean", "Number of units"] if "Number of units" in dataset_summary else None,
                 "Avg JS Features": dataset_summary.loc[
                     "mean", "Average Number of JS Features"] if "Average Number of JS Features" in dataset_summary else None
             }

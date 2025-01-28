@@ -21,6 +21,7 @@ export default {
           // Covers export { foo, bar }
           // Covers export const foo = () => {...}
           // Covers export function foo() {...}
+          // Covers export class foo {...}
           ExportNamedDeclaration(node) {
             if (node.declaration) {
               if (node.declaration.type === "VariableDeclaration") {
@@ -41,6 +42,9 @@ export default {
                 });
               } else if (node.declaration.type === "FunctionDeclaration") {
                 // Handle `export function foo() {...}`
+                reportExport(node, "Named", node.declaration.id.name);
+              } else if (node.declaration.type === "ClassDeclaration") {
+                // Handle `export class foo { ... }`
                 reportExport(node, "Named", node.declaration.id.name);
               }
             } else if (node.specifiers) {
