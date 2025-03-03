@@ -7,7 +7,13 @@ import re
 ESLINT_CONFIG = "eslint.config.js"
 ESLINT_TYPESCRIPT_CONFIG = "eslint-ts.config.js"
 OUTPUT_DIR = "results"
-BENCHMARK = "TestPilot-Benchmark"
+# BENCHMARK = "SynTest-Benchmark"
+# BENCHMARK = "TestPilot-Benchmark"
+# BENCHMARK = "JS-VS-TS-JS-Benchmark"
+# BENCHMARK = "JS-VS-TS-TS-Benchmark"
+BENCHMARK = "JS-VS-TS-Vue-Benchmark"
+# BENCHMARK = "JS-Projects"
+# BENCHMARK = "WebStorm-Benchmark"
 
 # Only evaluate units that are exported
 # Todo How does the eval plugin find units, also classes?? Finds functions and methods not classes
@@ -103,17 +109,17 @@ def run_eslint_on_files(project, files):
                                     eslint_result["LOC"][object.group(1)] = current_loc + int(loc.group(1))
                                     # Add class and corresponding method to list
                                     if object.group(1) in class_list:
-                                        class_list[object.group(1)].append(unit.group(1))
+                                        class_list[object.group(1)].append([unit.group(1), message["line"]])
                                     else:
-                                        class_list[object.group(1)] = [unit.group(1)]
+                                        class_list[object.group(1)] = [[unit.group(1), message["line"]]]
                                 # Otherwise add the unit name as the key and LOC value as the value
                                 eslint_result["LOC"][unit.group(1)] = int(loc.group(1))
                         if message["ruleId"] == "complexity":
-                            unit = re.search(r"(?:Function|Method|Static method|Static async method)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:Function|Method|Static method|Static async method|Getter|Async method)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             cc = re.search(r"complexity of (\d+)", message["message"])
                             if unit and cc:
                                 # Add the unit name as the key and CC value as the value
-                                eslint_result["CC"][unit.group(1)] = int(cc.group(1))
+                                eslint_result["CC"][unit.group(1)] = [int(cc.group(1)), message["line"]]
                         if message["ruleId"] == "contains-async/find-async":
                             unit = re.search(r"(?:function|object|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
@@ -167,10 +173,12 @@ def run_eslint_on_files(project, files):
                     # Set class CC as the average CC of the class methods
                     for class_name, methods in class_list.items():
                         totalCC = 0
-                        for method in methods:
-                            if method in eslint_result["CC"] and eslint_result["CC"][method] is not None:
-                                totalCC = totalCC + eslint_result["CC"][method]
-                        eslint_result["CC"][class_name] = totalCC/len(methods)
+                        noMethods = 0
+                        for [method, loc] in methods:
+                            if method in eslint_result["CC"] and eslint_result["CC"][method] is not None and loc == eslint_result["CC"][method][1]:
+                                totalCC = totalCC + eslint_result["CC"][method][0]
+                                noMethods = noMethods + 1
+                        eslint_result["CC"][class_name] = [totalCC / noMethods if noMethods != 0 else 1, 0]
                     # Add the updated result to results list
                     results.append(eslint_result)
             else:
@@ -184,7 +192,9 @@ def reformat_data(results):
     for result in results:
         for unit in result["exportedUnits"]:
             loc = result["LOC"].get(unit, 0)  # Default LOC to 0 if not found
-            cc = result["CC"].get(unit, 1) or 1  # Default CC to 1 if not found or if CC is 0
+            if loc == 0:
+                continue
+            cc = result["CC"][unit][0] if unit in result["CC"] and result["CC"][unit][0] != 0 else 1  # Default CC to 1 if not found or if CC is 0
             asyncFound = result["JS:Async"].get(unit, 0)  # Default to 0 if not found
             dynamicTyping = result["JS:DynamicTyping"].get(unit, 0)  # Default to 0 if not found
             domInteraction = result["JS:DomInteraction"].get(unit, 0)  # Default to 0 if not found
@@ -314,11 +324,12 @@ def main():
             files = [
                 os.path.join(root, file)
                 for root, _, filenames in os.walk(project_path)
-                if 'dist' not in root and 'test' not in root  # Ignore 'dist' and 'test' directories
-                for file in filenames if (file.endswith(".js") or file.endswith(".ts"))
+                if 'dist' not in root and 'test' not in root and 'node_modules' not in root  # Ignore 'dist' and 'test' directories
+                for file in filenames if file.endswith((".js", ".ts", ".jsx", ".tsx", ".mjs", ".cjs"))
             ]
             print(f"Found {len(files)} files in project: {project_path}")
-
+            # if len(files) > 50:
+            #     continue
             # Run ESLint and save results
             results = run_eslint_on_files(project, files)
             reformatted_results = reformat_data(results)

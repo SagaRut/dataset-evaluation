@@ -1,8 +1,16 @@
+import csv
 import os
 import pandas as pd
 from scipy.stats import entropy
 from itertools import combinations
 from collections import defaultdict
+from collections import Counter
+
+# FEATURE_LOOKUP = "JS:PropertyAccess"
+# FEATURE_LOOKUP = "JS:Closures"
+FEATURE_LOOKUP = "JS:Async"
+# FEATURE_LOOKUP = "JS:Prototype"
+PROJECT_LIST = []
 
 def analyze_benchmark(directory):
     all_benchmark_results = []  # To store results for all benchmarks (1 line per benchmark)
@@ -48,7 +56,11 @@ def analyze_benchmark(directory):
             benchmark = file.split("_")[2]  # Extract benchmark from the file
             eslint_results = pd.read_csv(file_path)
             js_features = [col for col in eslint_results.columns if col.startswith("JS:")]
-
+            used_features = eslint_results[js_features].sum(axis=0)
+            no_features_covered = (used_features > 0).sum()
+            total_features = len(js_features)
+            ratio_feature_coverage = no_features_covered/total_features
+            list_features_covered = used_features[used_features > 0].index.tolist()
             if js_features and eslint_results[js_features].sum(axis=0).sum() > 0:
                 feature_proportions = eslint_results[js_features].sum(axis=0) / eslint_results[js_features].sum(
                     axis=0).sum()
@@ -68,14 +80,23 @@ def analyze_benchmark(directory):
             # We will now join keys with an underscore and remove the curly braces
             top_interactions_str = "; ".join([f"{k[0]}_{k[1]}: {v}" for k, v in top_interactions.items()])
 
+            complexity = float(eslint_results["CC"].mean())
+
+            avg_no_features = float(eslint_results[js_features].sum(axis=1).mean()) if js_features else None
             project_results = {
                 "Benchmark": benchmark,  # Store benchmark name
                 "Project": project,  # Store project name
+                "Features Covered": ratio_feature_coverage,  # Percentage of features covered
+                "Total JS Features Per Unit (Mean)": avg_no_features,  # Cast to float to avoid np.int64
+                "Avg Complexity": complexity,
                 "Feature Entropy": feature_entropy,
                 "Top Pairwise Interactions": top_interactions_str,  # Use custom string format
-                "Total JS Features Per Unit (Mean)": float(eslint_results[js_features].sum(
-                    axis=1).mean()) if js_features else None  # Cast to float to avoid np.int64
+                "Features covered": list_features_covered,
             }
+
+            if FEATURE_LOOKUP in list_features_covered:
+                if complexity>=2:
+                    PROJECT_LIST.append([benchmark, project, avg_no_features, complexity])
 
             # Append project results to the benchmark's project list
             benchmarks[benchmark]["project"].append(project_results)
@@ -92,6 +113,19 @@ benchmark_directory = "results/"
 # Run the analysis
 benchmarks, benchmark_results, project_results = analyze_benchmark(benchmark_directory)
 
+no_total_features = 9
+for benchmark, results in benchmarks.items():
+    features_covered = []
+    for project in results["project"]:
+        features_covered.extend(project["Features covered"])
+    count = Counter(features_covered)
+    features_covered = set(features_covered)
+    for benchmark_in_results in benchmark_results:
+        if benchmark_in_results["Benchmark"] == benchmark:
+            benchmark_in_results["Number of Projects"] = len(results["project"])
+            benchmark_in_results["Features Covered"] = len(features_covered)/no_total_features
+            benchmark_in_results["Features Count"] = count
+
 # Save per benchmark and aggregated results
 os.makedirs("analysis", exist_ok=True)
 
@@ -104,6 +138,14 @@ for benchmark, results in benchmarks.items():
     if results["project"]:  # Only save if there are project results
         project_file = f"analysis/{benchmark}_project_analysis_results.csv"
         pd.DataFrame(results["project"]).to_csv(project_file, index=False)
+
+directory = "analysis"
+file_path = os.path.join(directory, f"feature_projects_{FEATURE_LOOKUP.split(':')[1]}.csv")
+
+with open(file_path, mode="w", newline="") as file:
+    writer = csv.writer(file)
+    for item in PROJECT_LIST:
+        writer.writerow([item])
 
 print(f"Results saved per benchmark and aggregated across all benchmarks.")
 print(f"Aggregated benchmark results saved to {aggregated_benchmark_file}")
