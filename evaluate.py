@@ -8,23 +8,14 @@ ESLINT_CONFIG = "eslint.config.js"
 ESLINT_TYPESCRIPT_CONFIG = "eslint-ts.config.js"
 # OUTPUT_DIR = "results"
 OUTPUT_DIR = "test_results"
-# BENCHMARK = "SynTest-Benchmark"
+BENCHMARK = "SynTest-Benchmark"
 # BENCHMARK = "TestPilot-Benchmark"
 # BENCHMARK = "JS-VS-TS-JS-Benchmark"
 # BENCHMARK = "JS-VS-TS-TS-Benchmark"
 # BENCHMARK = "JS-VS-TS-Vue-Benchmark"
 # BENCHMARK = "JS-Projects"
 # BENCHMARK = "WebStorm-Benchmark"
-BENCHMARK = "test"
-
-# TODO Only evaluate units that are exported
-# Todo How does the eval plugin find units, also classes?? Finds functions and methods not classes
-# TODO set up eslint properly w package.json
-
-# TODO add a part where it clones the repos by itself, have a list of files to include???
-
-# TODO look into adding CC of global scope functions if they are used in the unit!
-# TODO change property back to object???
+# BENCHMARK = "test"
 
 def install_eslint_and_plugins():
     """Ensure ESLint and required plugins are installed."""
@@ -124,78 +115,79 @@ def run_eslint_on_files(project, files):
                             if unit and cc:
                                 # Add the unit name as the key and CC value as the value
                                 eslint_result["CC"][unit.group(1)] = [int(cc.group(1)), message["line"]]
+                        # To evaluate on a function level instead of a class level, replace object with property
                         if message["ruleId"] == "contains-async/find-async":
-                            unit = re.search(r"(?:function|property|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:function|object|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
                                 # Add the unit name as the key
                                 eslint_result["JS:Async"][unit.group(1)] = 1
                         if message["ruleId"] == "contains-dynamic-typing/find-dynamic-typing":
-                            unit = re.search(r"(?:function|property|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:function|object|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
                                 # Add the unit name as the key
                                 eslint_result["JS:DynamicTyping"][unit.group(1)] = 1
                         if message["ruleId"] == "contains-dom/find-dom-interaction":
-                            unit = re.search(r"(?:function|property|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:function|object|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
                                 # Add the unit name as the key
                                 eslint_result["JS:DomInteraction"][unit.group(1)] = 1
                         if message["ruleId"] == "contains-nested-function/find-nested-function":
-                            unit = re.search(r"(?:function|property|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:function|object|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
                                 # Add the unit name as the key
                                 eslint_result["JS:NestedFunction"][unit.group(1)] = 1
                         if message["ruleId"] == "contains-higher-order/find-higher-order":
-                            unit = re.search(r"(?:function|property|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:function|object|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
                                 # Add the unit name as the key
                                 eslint_result["JS:HigherOrder"][unit.group(1)] = 1
                         if message["ruleId"] == "contains-commonjs/find-commonjs":
-                            unit = re.search(r"(?:function|property|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:function|object|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
                                 # Add the unit name as the key
                                 eslint_result["JS:CommonJS"][unit.group(1)] = 1
                         if message["ruleId"] == "contains-es6/find-es6-syntax":
-                            unit = re.search(r"(?:function|property|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:function|object|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
                                 # Add the unit name as the key
                                 eslint_result["JS:ES6"][unit.group(1)] = 1
                         if message["ruleId"] == "contains-closures/find-closures":
-                            unit = re.search(r"(?:function|property|variable)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:function|object|variable)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
                                 # Add the unit name as the key
                                 eslint_result["JS:Closures"][unit.group(1)] = 1
                         if message["ruleId"] == "contains-prototype/find-prototype":
-                            unit = re.search(r"(?:function|property|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:function|object|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
                                 # Add the unit name as the key
                                 eslint_result["JS:Prototype"][unit.group(1)] = 1
                         if message["ruleId"] == "contains-property-access/find-object-property-access":
-                            unit = re.search(r"(?:function|property|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:function|object|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
                                 # Add the unit name as the key
                                 eslint_result["JS:PropertyAccess"][unit.group(1)] = 1
                         if message["ruleId"] == "contains-weak-typing/find-weak-typing":
-                            unit = re.search(r"(?:function|property|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:function|object|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
                                 # Add the unit name as the key
                                 eslint_result["JS:WeakTyping"][unit.group(1)] = 1
                         if message["ruleId"] == "contains-variadic-params/find-variadic-params":
-                            unit = re.search(r"(?:function|property|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:function|object|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
                                 # Add the unit name as the key
                                 eslint_result["JS:VariadicParams"][unit.group(1)] = 1
                         if message["ruleId"] == "contains-implicit-globals/find-implicit-globals":
-                            unit = re.search(r"(?:function|property|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:function|object|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
                                 # Add the unit name as the key
                                 eslint_result["JS:ImplicitGlobals"][unit.group(1)] = 1
                         if message["ruleId"] == "contains-undefined/find-undefined-property-access":
-                            unit = re.search(r"(?:function|property|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:function|object|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
                                 # Add the unit name as the key
                                 eslint_result["JS:Undefined"][unit.group(1)] = 1
                         if message["ruleId"] == "contains-object-manipulation/find-dynamic-object-manipulation":
-                            unit = re.search(r"(?:function|property|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:function|object|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
                                 # Add the unit name as the key
                                 eslint_result["JS:ObjectManipulation"][unit.group(1)] = 1
@@ -219,15 +211,16 @@ def run_eslint_on_files(project, files):
 def reformat_data(results):
     json_data = []
     for result in results:
-
-        # Union of all result["JS:<something>"] sets
-        js_units = set()
-        for key, value in result.items():
-            if key.startswith("JS:"):
-                js_units.update(value.keys())
-        # Intersection of exported_units and all JS:* units
-        intersection = set(result["exportedUnits"]) | js_units
-        for unit in intersection:
+        # Commented out code is for evaluations on all functions instead of only exported units
+        # # Union of all result["JS:<something>"] sets
+        # js_units = set()
+        # for key, value in result.items():
+        #     if key.startswith("JS:"):
+        #         js_units.update(value.keys())
+        # # Intersection of exported_units and all JS:* units
+        # intersection = set(result["exportedUnits"]) | js_units
+        # for unit in intersection:
+        for unit in result["exportedUnits"]:
             loc = result["LOC"].get(unit, 0)  # Default LOC to 0 if not found
             if loc == 0:
                 continue
