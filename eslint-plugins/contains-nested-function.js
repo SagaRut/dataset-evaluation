@@ -1,5 +1,6 @@
-import { getEnclosingContexts } from './utils.js';
+import { getEnclosingContext } from './utils.js';
 
+// TODO fara yfir closures og nested function dectectionin...
 export default {
   rules: {
     "find-nested-function": {
@@ -10,35 +11,35 @@ export default {
         },
         schema: [],
         messages: {
-          found: "Nested function found in '{{ contexts }}'.",
+          found: "Nested function found in '{{ enclosingContext }}'.",
         },
       },
       create(context) {
         function reportNestedFunction(node) {
-          const contexts = getEnclosingContexts(node);
+          const enclosingContext = getEnclosingContext(node);
           context.report({
             node,
             messageId: "found",
-            data: { contexts: contexts || "global scope" },
+            data: { enclosingContext: enclosingContext || "global scope" },
           });
         }
 
         return {
           FunctionDeclaration(node) {
-            const contexts = getEnclosingContexts(node);
-            if (contexts.includes(">")) {
+            const enclosingContext = getEnclosingContext(node);
+            if (enclosingContext.includes(">")) {
               reportNestedFunction(node);
             }
           },
           FunctionExpression(node) {
-            const contexts = getEnclosingContexts(node);
-            if (contexts.includes(">")) {
+            const enclosingContext = getEnclosingContext(node);
+            if (enclosingContext.includes(">")) {
               reportNestedFunction(node);
             }
           },
           ArrowFunctionExpression(node) {
-            const contexts = getEnclosingContexts(node);
-            if (contexts.includes(">")) {
+            const enclosingContext = getEnclosingContext(node);
+            if (enclosingContext.includes(">")) {
               reportNestedFunction(node);
             }
           },

@@ -1,4 +1,4 @@
-import { getEnclosingContexts } from './utils.js';
+import { getEnclosingContext } from './utils.js';
 
 export default {
     rules: {
@@ -10,7 +10,7 @@ export default {
                 },
                 schema: [],
                 messages: {
-                    found: "CommonJS usage '{{ type }}' found in '{{ contexts }}'.",
+                    found: "CommonJS usage '{{ type }}' found in '{{ enclosingContext }}'.",
                 },
             },
             create(context) {
@@ -21,11 +21,11 @@ export default {
                             node.callee.type === "Identifier" &&
                             node.callee.name === "require"
                         ) {
-                            const contexts = getEnclosingContexts(node);
+                            const enclosingContext = getEnclosingContext(node);
                             context.report({
                                 node,
                                 messageId: "found",
-                                data: { type: "require", contexts: contexts || "global scope" },
+                                data: { type: "require", enclosingContext: enclosingContext || "global scope" },
                             });
                         }
                     },
@@ -37,11 +37,11 @@ export default {
                             node.property.type === "Identifier" &&
                             node.property.name === "exports"
                         ) {
-                            const contexts = getEnclosingContexts(node);
+                            const enclosingContext = getEnclosingContext(node);
                             context.report({
                                 node,
                                 messageId: "found",
-                                data: { type: "module.exports", contexts: contexts || "global scope" },
+                                data: { type: "module.exports", enclosingContext: enclosingContext || "global scope" },
                             });
                         }
 
@@ -50,11 +50,11 @@ export default {
                             node.object.type === "Identifier" &&
                             node.object.name === "exports"
                         ) {
-                            const contexts = getEnclosingContexts(node);
+                            const enclosingContext = getEnclosingContext(node);
                             context.report({
                                 node,
                                 messageId: "found",
-                                data: { type: "exports", contexts: contexts || "global scope" },
+                                data: { type: "exports", enclosingContext: enclosingContext || "global scope" },
                             });
                         }
                     },

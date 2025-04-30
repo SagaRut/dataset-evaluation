@@ -9,4 +9,8 @@ SynTest-Benchmark
 TestPilot-Benchmark
 TS-projects
 WebStorm-Benchmark
-
+test
+test_results
+analysis
+feature-analysis
+.idea

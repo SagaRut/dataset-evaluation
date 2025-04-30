@@ -32,7 +32,7 @@ export default {
                         context.report({
                             node,
                             messageId: "branchCount",
-                            data: { name: node.id.name, count: branchCount },
+                            data: { name: node.id?.name || "(anonymous)", count: branchCount },
                         });
                     },
                 };

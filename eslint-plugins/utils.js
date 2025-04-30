@@ -1,8 +1,8 @@
 /**
- * Helper function to get all enclosing named contexts
+ * Helper function to get all enclosing named context
  */
-export function getEnclosingContexts(node) {
-    const contexts = [];
+export function getEnclosingContext(node) {
+    const context = [];
     let current = node;
 
     while (current) {
@@ -12,23 +12,23 @@ export function getEnclosingContexts(node) {
             current.type === "ArrowFunctionExpression"
         ) {
             if (current.id && current.id.name) {
-                contexts.push(`function '${current.id.name}'`);
+                context.push(`function '${current.id.name}'`);
             } else if (current.parent && current.parent.type === "VariableDeclarator") {
                 // Arrow function assigned to a variable
                 const varName = current.parent.id.name;
-                contexts.push(`variable '${varName}' arrow function`);
+                context.push(`variable '${varName}' arrow function`);
             } else {
-                contexts.push("anonymous function");
+                context.push("anonymous function");
             }
         } else if (current.type === "ClassDeclaration") {
             if (current.id && current.id.name) {
-                contexts.push(`class '${current.id.name}'`);
+                context.push(`class '${current.id.name}'`);
             } else {
-                contexts.push("anonymous class");
+                context.push("anonymous class");
             }
         } else if (current.type === "MethodDefinition") {
             if (current.key && current.key.name) {
-                contexts.push(`method '${current.key.name}'`);
+                context.push(`method '${current.key.name}'`);
             }
         } else if (
             current.type === "AssignmentExpression" &&
@@ -38,10 +38,10 @@ export function getEnclosingContexts(node) {
             current.left.property &&
             current.left.property.type === "Identifier"
         ) {
-            contexts.push(`object '${current.left.object.name}' property '${current.left.property.name}'`);
+            context.push(`object '${current.left.object.name}' property '${current.left.property.name}'`);
         }
         current = current.parent;
     }
 
-    return contexts.reverse().join(" > ");
+    return context.reverse().join(" > ");
 }

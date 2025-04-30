@@ -6,26 +6,25 @@ import re
 
 ESLINT_CONFIG = "eslint.config.js"
 ESLINT_TYPESCRIPT_CONFIG = "eslint-ts.config.js"
-OUTPUT_DIR = "results"
+# OUTPUT_DIR = "results"
+OUTPUT_DIR = "test_results"
 # BENCHMARK = "SynTest-Benchmark"
 # BENCHMARK = "TestPilot-Benchmark"
 # BENCHMARK = "JS-VS-TS-JS-Benchmark"
 # BENCHMARK = "JS-VS-TS-TS-Benchmark"
-BENCHMARK = "JS-VS-TS-Vue-Benchmark"
+# BENCHMARK = "JS-VS-TS-Vue-Benchmark"
 # BENCHMARK = "JS-Projects"
 # BENCHMARK = "WebStorm-Benchmark"
+BENCHMARK = "test"
 
-# Only evaluate units that are exported
+# TODO Only evaluate units that are exported
 # Todo How does the eval plugin find units, also classes?? Finds functions and methods not classes
-# TODO rest of JS features, finna instance, fyrst og gera evaluation á complexity miðað við það/coverage af hlutum?
-# TODO rest af hlutum sem Mitchell talaði um
-# Todo Gera lista af benchmarks sem ég ætla að evaluate-a
 # TODO set up eslint properly w package.json
 
 # TODO add a part where it clones the repos by itself, have a list of files to include???
 
 # TODO look into adding CC of global scope functions if they are used in the unit!
-# TODO fix that it only queries files ending with .js and .ts. Should also cover for example mjs, tsx etc...
+# TODO change property back to object???
 
 def install_eslint_and_plugins():
     """Ensure ESLint and required plugins are installed."""
@@ -81,10 +80,15 @@ def run_eslint_on_files(project, files):
                     eslint_result["JS:NestedFunction"] = {}
                     eslint_result["JS:HigherOrder"] = {}
                     eslint_result["JS:CommonJS"] = {}
+                    eslint_result["JS:ES6"] = {}
                     eslint_result["JS:Closures"] = {}
                     eslint_result["JS:Prototype"] = {}
                     eslint_result["JS:PropertyAccess"] = {}
-                    eslint_result["TS:Any"] = {}
+                    eslint_result["JS:WeakTyping"] = {}
+                    eslint_result["JS:VariadicParams"] = {}
+                    eslint_result["JS:ImplicitGlobals"] = {}
+                    eslint_result["JS:Undefined"] = {}
+                    eslint_result["JS:ObjectManipulation"] = {}
                     class_list = {}
 
                     # Find exported units
@@ -121,55 +125,80 @@ def run_eslint_on_files(project, files):
                                 # Add the unit name as the key and CC value as the value
                                 eslint_result["CC"][unit.group(1)] = [int(cc.group(1)), message["line"]]
                         if message["ruleId"] == "contains-async/find-async":
-                            unit = re.search(r"(?:function|object|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:function|property|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
                                 # Add the unit name as the key
                                 eslint_result["JS:Async"][unit.group(1)] = 1
                         if message["ruleId"] == "contains-dynamic-typing/find-dynamic-typing":
-                            unit = re.search(r"(?:function|object|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:function|property|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
                                 # Add the unit name as the key
                                 eslint_result["JS:DynamicTyping"][unit.group(1)] = 1
                         if message["ruleId"] == "contains-dom/find-dom-interaction":
-                            unit = re.search(r"(?:function|object|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:function|property|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
                                 # Add the unit name as the key
                                 eslint_result["JS:DomInteraction"][unit.group(1)] = 1
                         if message["ruleId"] == "contains-nested-function/find-nested-function":
-                            unit = re.search(r"(?:function|object|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:function|property|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
                                 # Add the unit name as the key
                                 eslint_result["JS:NestedFunction"][unit.group(1)] = 1
                         if message["ruleId"] == "contains-higher-order/find-higher-order":
-                            unit = re.search(r"(?:function|object|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:function|property|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
                                 # Add the unit name as the key
                                 eslint_result["JS:HigherOrder"][unit.group(1)] = 1
                         if message["ruleId"] == "contains-commonjs/find-commonjs":
-                            unit = re.search(r"(?:function|object|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:function|property|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
                                 # Add the unit name as the key
                                 eslint_result["JS:CommonJS"][unit.group(1)] = 1
+                        if message["ruleId"] == "contains-es6/find-es6-syntax":
+                            unit = re.search(r"(?:function|property|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            if unit:
+                                # Add the unit name as the key
+                                eslint_result["JS:ES6"][unit.group(1)] = 1
                         if message["ruleId"] == "contains-closures/find-closures":
-                            unit = re.search(r"(?:function|object|variable)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:function|property|variable)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
                                 # Add the unit name as the key
                                 eslint_result["JS:Closures"][unit.group(1)] = 1
                         if message["ruleId"] == "contains-prototype/find-prototype":
-                            unit = re.search(r"(?:function|object|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:function|property|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
                                 # Add the unit name as the key
                                 eslint_result["JS:Prototype"][unit.group(1)] = 1
                         if message["ruleId"] == "contains-property-access/find-object-property-access":
-                            unit = re.search(r"(?:function|object|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            unit = re.search(r"(?:function|property|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
                                 # Add the unit name as the key
                                 eslint_result["JS:PropertyAccess"][unit.group(1)] = 1
-                        if message["ruleId"] == "contains-any/find-any":
-                            unit = re.search(r"(?:function|object|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                        if message["ruleId"] == "contains-weak-typing/find-weak-typing":
+                            unit = re.search(r"(?:function|property|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
                             if unit:
                                 # Add the unit name as the key
-                                eslint_result["TS:Any"][unit.group(1)] = 1
+                                eslint_result["JS:WeakTyping"][unit.group(1)] = 1
+                        if message["ruleId"] == "contains-variadic-params/find-variadic-params":
+                            unit = re.search(r"(?:function|property|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            if unit:
+                                # Add the unit name as the key
+                                eslint_result["JS:VariadicParams"][unit.group(1)] = 1
+                        if message["ruleId"] == "contains-implicit-globals/find-implicit-globals":
+                            unit = re.search(r"(?:function|property|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            if unit:
+                                # Add the unit name as the key
+                                eslint_result["JS:ImplicitGlobals"][unit.group(1)] = 1
+                        if message["ruleId"] == "contains-undefined/find-undefined-property-access":
+                            unit = re.search(r"(?:function|property|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            if unit:
+                                # Add the unit name as the key
+                                eslint_result["JS:Undefined"][unit.group(1)] = 1
+                        if message["ruleId"] == "contains-object-manipulation/find-dynamic-object-manipulation":
+                            unit = re.search(r"(?:function|property|variable|class)\s+'([a-zA-Z_$][\w$]*)'", message["message"])
+                            if unit:
+                                # Add the unit name as the key
+                                eslint_result["JS:ObjectManipulation"][unit.group(1)] = 1
                     # Set class CC as the average CC of the class methods
                     for class_name, methods in class_list.items():
                         totalCC = 0
@@ -190,7 +219,15 @@ def run_eslint_on_files(project, files):
 def reformat_data(results):
     json_data = []
     for result in results:
-        for unit in result["exportedUnits"]:
+
+        # Union of all result["JS:<something>"] sets
+        js_units = set()
+        for key, value in result.items():
+            if key.startswith("JS:"):
+                js_units.update(value.keys())
+        # Intersection of exported_units and all JS:* units
+        intersection = set(result["exportedUnits"]) | js_units
+        for unit in intersection:
             loc = result["LOC"].get(unit, 0)  # Default LOC to 0 if not found
             if loc == 0:
                 continue
@@ -201,10 +238,15 @@ def reformat_data(results):
             nestedFunction = result["JS:NestedFunction"].get(unit, 0)  # Default to 0 if not found
             higherOrder = result["JS:HigherOrder"].get(unit, 0)  # Default to 0 if not found
             commonJS = result["JS:CommonJS"].get(unit, 0)  # Default to 0 if not found
+            es6 = result["JS:ES6"].get(unit, 0)  # Default to 0 if not found
             closures = result["JS:Closures"].get(unit, 0)  # Default to 0 if not found
             prototype = result["JS:Prototype"].get(unit, 0)  # Default to 0 if not found
             propertyAccess = result["JS:PropertyAccess"].get(unit, 0)  # Default to 0 if not found
-            any = result["TS:Any"].get(unit, 0)  # Default to 0 if not found
+            weakTyping = result["JS:WeakTyping"].get(unit, 0)  # Default to 0 if not found
+            variadicParams = result["JS:VariadicParams"].get(unit, 0)  # Default to 0 if not found
+            implicitGlobals = result["JS:ImplicitGlobals"].get(unit, 0)  # Default to 0 if not found
+            undefined = result["JS:Undefined"].get(unit, 0)  # Default to 0 if not found
+            objectManipulation = result["JS:ObjectManipulation"].get(unit, 0)  # Default to 0 if not found
             # Add to JSON data
             json_data.append({
                 "Project": result["project"],
@@ -218,10 +260,15 @@ def reformat_data(results):
                 "JS:NestedFunction": nestedFunction,
                 "JS:HigherOrder": higherOrder,
                 "JS:CommonJS": commonJS,
+                "JS:ES6": es6,
                 "JS:Closures": closures,
                 "JS:Prototype": prototype,
                 "JS:PropertyAccess": propertyAccess,
-                "TS:Any": any
+                "JS:WeakTyping": weakTyping,
+                "JS:VariadicParams": variadicParams,
+                "JS:ImplicitGlobals": implicitGlobals,
+                "JS:Undefined": undefined,
+                "JS:ObjectManipulation": objectManipulation
             })
     return json_data
 
@@ -235,8 +282,10 @@ def save_results_to_file(results, reformatted_results, json_file, csv_file):
         writer = csv.writer(f)
         writer.writerow(["Project", "File", "Unit", "LOC", "CC",
                          "JS:Async", "JS:DynamicTyping", "JS:DomInteraction",
-                         "JS:NestedFunction", "JS:HigherOrder", "JS:CommonJS",
-                         "JS:Closures", "JS:Prototype", "JS:PropertyAccess", "TS:Any"])
+                         "JS:NestedFunction", "JS:HigherOrder", "JS:CommonJS", "JS:ES6",
+                         "JS:Closures", "JS:Prototype", "JS:PropertyAccess",
+                         "JS:WeakTyping", "JS:VariadicParams", "JS:ImplicitGlobals",
+                         "JS:Undefined", "JS:ObjectManipulation"])
         for result in reformatted_results:
             writer.writerow([
                 result["Project"],
@@ -250,10 +299,15 @@ def save_results_to_file(results, reformatted_results, json_file, csv_file):
                 result["JS:NestedFunction"],
                 result["JS:HigherOrder"],
                 result["JS:CommonJS"],
+                result["JS:ES6"],
                 result["JS:Closures"],
                 result["JS:Prototype"],
                 result["JS:PropertyAccess"],
-                result["TS:Any"],
+                result["JS:WeakTyping"],
+                result["JS:VariadicParams"],
+                result["JS:ImplicitGlobals"],
+                result["JS:Undefined"],
+                result["JS:ObjectManipulation"],
             ])
     print(f"Results saved to {csv_file}")
 
@@ -268,15 +322,13 @@ def calculate_average_results(results):
         loc = result["LOC"]
         cc = result["CC"]
         noOfJSFeatures = sum(value for key, value in result.items() if key.startswith('JS'))
-        noOfTSFeatures = sum(value for key, value in result.items() if key.startswith('TS'))
 
         if project not in project_data:
-            project_data[project] = {"LOC": [], "CC": [], "JSFeatures": [], "TSFeatures": []}
+            project_data[project] = {"LOC": [], "CC": [], "JSFeatures": []}
 
         project_data[project]["LOC"].append(loc)
         project_data[project]["CC"].append(cc)
         project_data[project]["JSFeatures"].append(noOfJSFeatures)
-        project_data[project]["TSFeatures"].append(noOfTSFeatures)
 
     # Calculate averages
     averages = []
@@ -285,13 +337,11 @@ def calculate_average_results(results):
         avg_cc = sum(metrics["CC"]) / len(metrics["CC"])
         no_of_units = len(metrics["LOC"])
         avg_noJSFeatures = sum(metrics["JSFeatures"]) / len(metrics["JSFeatures"])
-        avg_noTSFeatures = sum(metrics["TSFeatures"]) / len(metrics["TSFeatures"])
         averages.append({"Project": project,
                          "Average LOC": avg_loc,
                          "Average CC": avg_cc,
                          "Number of units": no_of_units,
-                         "Average Number of JS Features": avg_noJSFeatures,
-                         "Average Number of TS Features": avg_noTSFeatures},)
+                         "Average Number of JS Features": avg_noJSFeatures},)
 
     return averages
 
@@ -304,7 +354,7 @@ def save_averages_to_file(averages, json_file, csv_file):
 
     # Save to CSV
     with open(os.path.join(OUTPUT_DIR, csv_file), "w", newline="") as cf:
-        writer = csv.DictWriter(cf, fieldnames=["Project", "Average LOC", "Average CC", "Number of units", "Average Number of JS Features", "Average Number of TS Features"])
+        writer = csv.DictWriter(cf, fieldnames=["Project", "Average LOC", "Average CC", "Number of units", "Average Number of JS Features"])
         writer.writeheader()
         writer.writerows(averages)
 
@@ -319,14 +369,16 @@ def main():
         project_path = os.path.join(BENCHMARK, project)
         if os.path.isdir(project_path):
             print(f"Processing project: {project_path}")
+            files = []
 
-            # Get all JavaScript files in the project
-            files = [
-                os.path.join(root, file)
-                for root, _, filenames in os.walk(project_path)
-                if 'dist' not in root and 'test' not in root and 'node_modules' not in root  # Ignore 'dist' and 'test' directories
-                for file in filenames if file.endswith((".js", ".ts", ".jsx", ".tsx", ".mjs", ".cjs"))
-            ]
+            for root, dirs, filenames in os.walk(project_path):
+                # Modify dirs in-place to skip unwanted folders
+                dirs[:] = [d for d in dirs if d not in {'dist', 'test', 'node_modules'}]
+
+                for file in filenames:
+                    if file.endswith((".js", ".ts", ".jsx", ".tsx", ".mjs", ".cjs")):
+                        files.append(os.path.join(root, file))
+
             print(f"Found {len(files)} files in project: {project_path}")
             # if len(files) > 50:
             #     continue

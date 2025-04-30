@@ -1,4 +1,4 @@
-import { getEnclosingContexts } from './utils.js';
+import { getEnclosingContext } from './utils.js';
 // TODO cover more cases where object property access affects the control flow
 export default {
   rules: {
@@ -10,18 +10,18 @@ export default {
         },
         schema: [],
         messages: {
-          found: "Object property access found in '{{ contexts }}'.",
+          found: "Object property access found in '{{ enclosingContext }}'.",
         },
       },
       create(context) {
         function checkForObjectPropertyAccess(node, paramName, functionNode) {
           // Look for MemberExpression like foo.bar
           if (node.type === "MemberExpression" && node.object.name === paramName) {
-            const contexts = getEnclosingContexts(functionNode);
+            const enclosingContext = getEnclosingContext(functionNode);
             context.report({
               node,
               messageId: "found",
-              data: { contexts: contexts || "global scope" },
+              data: { enclosingContext: enclosingContext || "global scope" },
             });
           }
         }

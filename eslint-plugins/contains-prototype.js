@@ -1,4 +1,4 @@
-import { getEnclosingContexts } from './utils.js';
+import { getEnclosingContext } from './utils.js';
 
 export default {
     rules: {
@@ -10,7 +10,7 @@ export default {
                 },
                 schema: [],
                 messages: {
-                    found: "Prototype usage detected in '{{ contexts }}'.",
+                    found: "Prototype usage detected in '{{ enclosingContext }}'.",
                 },
             },
             create(context) {
@@ -23,11 +23,11 @@ export default {
                             node.property &&
                             node.property.name === "prototype"
                         ) {
-                            const contexts = getEnclosingContexts(node);
+                            const enclosingContext = getEnclosingContext(node);
                             context.report({
                                 node,
                                 messageId: "found",
-                                data: { contexts: contexts || "global scope" },
+                                data: { enclosingContext: enclosingContext || "global scope" },
                             });
                         }
                     },
@@ -38,11 +38,11 @@ export default {
                             node.callee.object.name === "Object" &&
                             node.callee.property.name === "create"
                         ) {
-                            const contexts = getEnclosingContexts(node);
+                            const enclosingContext = getEnclosingContext(node);
                             context.report({
                                 node,
                                 messageId: "found",
-                                data: { contexts: contexts || "global scope" },
+                                data: { enclosingContext: enclosingContext || "global scope" },
                             });
                         }
                     },
@@ -54,11 +54,11 @@ export default {
                             node.left.object.property &&
                             node.left.object.property.name === "prototype"
                         ) {
-                            const contexts = getEnclosingContexts(node);
+                            const enclosingContext = getEnclosingContext(node);
                             context.report({
                                 node,
                                 messageId: "found",
-                                data: { contexts: contexts || "global scope" },
+                                data: { enclosingContext: enclosingContext || "global scope" },
                             });
                         }
                     },
