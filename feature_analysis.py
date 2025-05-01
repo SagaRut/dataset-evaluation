@@ -2,13 +2,6 @@ import pandas as pd
 import json
 from collections import defaultdict
 
-# TODO keyra fyrir öll project í benchmark, hvaða benchmark?
-# TODO average coverage segir ekki mikið eitt og sér, get ég fundið coverage prósentuna? eða miðað við branches/statements á unitinu sjálfu,
-# TODO Skila niðurstöðum, average failrate fyrir units með X feature per project og per benchmark, líka f coverage
-# TODO Skiptir þá ekki máli að projectin séu partur af feature benchmark því við sjáum hvort þetta feature sé í því eða ekki...
-# TODO what to do about that there are more than one test generated per unit under test?? Anything? maybe not
-# TODO cant map units perfectly between require units and my unit finding per file
-
 # Load CSV
 csv_path = "results/eslint_results_test_dropzone.csv"
 df_units = pd.read_csv(csv_path)
