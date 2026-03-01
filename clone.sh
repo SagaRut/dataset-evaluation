@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPOS_FILE="benchmark.txt"
-TARGET_DIR="Benchmark-Projects"
-LOG_FILE="clone_validate.log"
+REPOS_FILE="repos.txt"
+TARGET_DIR="JS-Projects"
+LOG_FILE="clone.log"
 
 mkdir -p "$TARGET_DIR"
 : > "$LOG_FILE"
@@ -50,37 +50,6 @@ while IFS= read -r url; do
     mkdir -p "$dest"
     run_logged "cloning" git clone --depth 1 "$url" "$dest" || { discard_repo "$dest" "clone failed"; continue; }
   fi
-
-  if [[ ! -f "$dest/package.json" ]]; then
-    discard_repo "$dest" "no package.json"
-    continue
-  fi
-
-  pushd "$dest" >/dev/null
-
-  if [[ -f package-lock.json ]]; then
-    if ! run_logged "npm ci" npm ci; then
-      popd >/dev/null
-      discard_repo "$dest" "npm ci failed"
-      continue
-    fi
-  else
-    if ! run_logged "npm install" npm install; then
-      popd >/dev/null
-      discard_repo "$dest" "npm install failed"
-      continue
-    fi
-  fi
-
-  if node -e 'process.exit((require("./package.json").scripts||{}).build?0:1)' ; then
-    run_logged "npm run build" npm run build || true
-  elif [[ -f tsconfig.json ]]; then
-    run_logged "tsc --noEmit (best effort)" npx --yes tsc -p . --noEmit || true
-  else
-    echo "-> no build script; skipping build" | tee -a "$LOG_FILE"
-  fi
-
-  popd >/dev/null
 done < "$REPOS_FILE"
 
 echo "Done. Log: $LOG_FILE"
