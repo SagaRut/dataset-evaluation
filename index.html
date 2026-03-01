@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dataset Evaluation Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .feature-checkbox:checked + span {
+            font-weight: bold;
+            color: #2563eb;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen p-8">
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-3xl font-bold mb-6 text-gray-800">Dataset Evaluation Explorer</h1>
+        <p class="mb-8 text-gray-600">Filter repositories by JavaScript features and complexity criteria.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <!-- Sidebar: Filters -->
+            <div class="md:col-span-1 bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-4">Filters</h2>
+                
+                <div class="mb-6">
+                    <h3 class="font-medium mb-2">Metrics</h3>
+                    <div class="space-y-2">
+                        <div>
+                            <label class="block text-sm text-gray-600">Min Avg CC</label>
+                            <input type="number" id="minCC" step="0.1" value="0" class="w-full border rounded px-2 py-1">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-600">Min No. Units</label>
+                            <input type="number" id="minUnits" value="0" class="w-full border rounded px-2 py-1">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <h3 class="font-medium mb-2">Features</h3>
+                    <div id="feature-list" class="space-y-1 max-h-96 overflow-y-auto">
+                        <!-- Features will be populated here -->
+                    </div>
+                </div>
+                
+                <button id="reset-filters" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded transition">
+                    Reset Filters
+                </button>
+            </div>
+
+            <!-- Main Content: Results -->
+            <div class="md:col-span-3">
+                <div class="bg-white p-6 rounded-lg shadow mb-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-semibold">Results (<span id="count">0</span>)</h2>
+                        <div class="text-sm text-gray-500">
+                            Showing projects that match <span class="font-bold">ALL</span> selected features.
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Project</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Benchmark</th>
+                                    <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Avg CC</th>
+                                    <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Units</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">GitHub</th>
+                                </tr>
+                            </thead>
+                            <tbody id="results-body" class="bg-white divide-y divide-gray-200">
+                                <!-- Results will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let data = { features: [], projects: [] };
+        const featureListEl = document.getElementById('feature-list');
+        const resultsBodyEl = document.getElementById('results-body');
+        const countEl = document.getElementById('count');
+        const minCCInput = document.getElementById('minCC');
+        const minUnitsInput = document.getElementById('minUnits');
+
+        async function loadData() {
+            try {
+                const response = await fetch('web_data.json');
+                data = await response.json();
+                populateFeatures();
+                renderResults();
+            } catch (err) {
+                console.error('Error loading data:', err);
+                resultsBodyEl.innerHTML = '<tr><td colspan="5" class="px-4 py-4 text-center text-red-500">Error loading data. Make sure web_data.json is present.</td></tr>';
+            }
+        }
+
+        function populateFeatures() {
+            featureListEl.innerHTML = '';
+            data.features.forEach(feature => {
+                const label = document.createElement('label');
+                label.className = 'flex items-center space-x-2 cursor-pointer';
+                label.innerHTML = `
+                    <input type="checkbox" value="${feature}" class="feature-checkbox rounded text-blue-600 focus:ring-blue-500">
+                    <span class="text-sm text-gray-700">${feature.replace('JS:', '')}</span>
+                `;
+                label.querySelector('input').addEventListener('change', renderResults);
+                featureListEl.appendChild(label);
+            });
+        }
+
+        function getSelectedFeatures() {
+            return Array.from(document.querySelectorAll('.feature-checkbox:checked')).map(cb => cb.value);
+        }
+
+        function renderResults() {
+            const selectedFeatures = getSelectedFeatures();
+            const minCC = parseFloat(minCCInput.value) || 0;
+            const minUnits = parseInt(minUnitsInput.value) || 0;
+
+            const filteredProjects = data.projects.filter(project => {
+                // Feature filter (AND logic)
+                for (const feature of selectedFeatures) {
+                    if (!project.features[feature]) return false;
+                }
+
+                // Metric filters
+                if (project.avg_cc < minCC) return false;
+                if (project.no_units < minUnits) return false;
+
+                return true;
+            });
+
+            countEl.textContent = filteredProjects.length;
+            resultsBodyEl.innerHTML = '';
+
+            if (filteredProjects.length === 0) {
+                resultsBodyEl.innerHTML = '<tr><td colspan="5" class="px-4 py-4 text-center text-gray-500">No projects match the criteria.</td></tr>';
+                return;
+            }
+
+            filteredProjects.forEach(project => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50';
+                row.innerHTML = `
+                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">${project.name}</td>
+                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">${project.benchmark}</td>
+                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 text-right">${project.avg_cc.toFixed(2)}</td>
+                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 text-right">${project.no_units}</td>
+                    <td class="px-4 py-3 whitespace-nowrap text-sm text-blue-600">
+                        ${project.github_link ? `<a href="${project.github_link}" target="_blank" class="hover:underline">Repo</a>` : '<span class="text-gray-400">N/A</span>'}
+                    </td>
+                `;
+                resultsBodyEl.appendChild(row);
+            });
+        }
+
+        [minCCInput, minUnitsInput].forEach(input => {
+            input.addEventListener('input', renderResults);
+        });
+
+        document.getElementById('reset-filters').addEventListener('click', () => {
+            document.querySelectorAll('.feature-checkbox').forEach(cb => cb.checked = false);
+            minCCInput.value = 0;
+            minUnitsInput.value = 0;
+            renderResults();
+        });
+
+        loadData();
+    </script>
+</body>
+</html>
