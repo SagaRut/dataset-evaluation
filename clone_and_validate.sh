@@ -29,17 +29,45 @@ discard_repo () {
   rm -rf "$repo_path" >>"$LOG_FILE" 2>&1 || true
 }
 
+extract_repo_and_commit () {
+  local url="$1"
+
+  if [[ "$url" == *github.com* ]]; then
+    repo_url="$(echo "$url" | sed -E 's|(https://github.com/[^/]+/[^/]+)/commit/.*|\1.git|')"
+    commit_hash="$(echo "$url" | sed -E 's|.*/commit/([a-f0-9]+).*|\1|')"
+
+  elif [[ "$url" == *gitlab.com* ]]; then
+    repo_url="$(echo "$url" | sed -E 's|(https://gitlab.com/[^/]+/[^/]+)/-?/commit/.*|\1.git|')"
+    commit_hash="$(echo "$url" | sed -E 's|.*/commit/([a-f0-9]+).*|\1|')"
+
+  else
+    return 1
+  fi
+
+  echo "$repo_url;$commit_hash"
+}
+
 while IFS= read -r url; do
-  url="$(echo "$url" | sed -e 's/[[:space:]]//g')"
+  url="$(echo "$url" | xargs)"
   [[ -z "$url" || "$url" == \#* ]] && continue
 
-  name="$(basename "$url")"
+  parsed="$(extract_repo_and_commit "$url")" || {
+    echo "!! Could not parse URL: $url" | tee -a "$LOG_FILE"
+    continue
+  }
+
+  repo_url="${parsed%%;*}"
+  commit_hash="${parsed##*;}"
+
+  name="$(basename "$repo_url")"
   name="${name%.git}"
   dest="$TARGET_DIR/$name"
 
   echo "==== $name ====" | tee -a "$LOG_FILE"
-  echo "URL: $url" | tee -a "$LOG_FILE"
-  echo "DIR: $dest" | tee -a "$LOG_FILE"
+  echo "Commit URL: $url" | tee -a "$LOG_FILE"
+  echo "Repo URL:   $repo_url" | tee -a "$LOG_FILE"
+  echo "Commit:     $commit_hash" | tee -a "$LOG_FILE"
+  echo "DIR:        $dest" | tee -a "$LOG_FILE"
 
   if [[ -d "$dest/.git" ]]; then
     echo "-> already cloned" | tee -a "$LOG_FILE"
@@ -47,16 +75,31 @@ while IFS= read -r url; do
     echo "-> dir exists and not empty; skipping clone" | tee -a "$LOG_FILE"
     continue
   else
-    mkdir -p "$dest"
-    run_logged "cloning" git clone --depth 1 "$url" "$dest" || { discard_repo "$dest" "clone failed"; continue; }
-  fi
-
-  if [[ ! -f "$dest/package.json" ]]; then
-    discard_repo "$dest" "no package.json"
-    continue
+    run_logged "cloning" git clone "$repo_url" "$dest" || {
+      discard_repo "$dest" "clone failed"
+      continue
+    }
   fi
 
   pushd "$dest" >/dev/null
+
+  run_logged "fetching" git fetch --all || {
+    popd >/dev/null
+    discard_repo "$dest" "fetch failed"
+    continue
+  }
+
+  run_logged "checkout $commit_hash" git checkout "$commit_hash" || {
+    popd >/dev/null
+    discard_repo "$dest" "checkout failed"
+    continue
+  }
+
+  if [[ ! -f package.json ]]; then
+    popd >/dev/null
+    discard_repo "$dest" "no package.json"
+    continue
+  fi
 
   if [[ -f package-lock.json ]]; then
     if ! run_logged "npm ci" npm ci; then
@@ -81,6 +124,7 @@ while IFS= read -r url; do
   fi
 
   popd >/dev/null
+
 done < "$REPOS_FILE"
 
 echo "Done. Log: $LOG_FILE"
