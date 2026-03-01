@@ -45,6 +45,10 @@ def generate_web_data():
                     "features": {}
                 }
                 
+                # Skip projects with NaN values in core metrics
+                if pd.isna(project_data["avg_cc"]) or pd.isna(project_data["avg_features_per_unit"]):
+                    continue
+                
                 # Extract JS: features
                 for col in df.columns:
                     if col.startswith("JS:"):

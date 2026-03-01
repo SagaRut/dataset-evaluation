@@ -70,32 +70,6 @@
       }
     },
     {
-      "name": "AI-Expert-Roadmap",
-      "benchmark": "JS-VS-TS-JS-Benchmark",
-      "avg_cc": NaN,
-      "avg_features_per_unit": NaN,
-      "no_units": 0,
-      "total_features": 0,
-      "github_link": "",
-      "features": {
-        "JS:Async": 0,
-        "JS:DynamicTyping": 0,
-        "JS:DomInteraction": 0,
-        "JS:NestedFunction": 0,
-        "JS:HigherOrder": 0,
-        "JS:CommonJS": 0,
-        "JS:ES6": 0,
-        "JS:Closures": 0,
-        "JS:Prototype": 0,
-        "JS:PropertyAccess": 0,
-        "JS:WeakTyping": 0,
-        "JS:VariadicParams": 0,
-        "JS:ImplicitGlobals": 0,
-        "JS:Undefined": 0,
-        "JS:ObjectManipulation": 0
-      }
-    },
-    {
       "name": "alex",
       "benchmark": "JS-VS-TS-JS-Benchmark",
       "avg_cc": 1.5,
@@ -382,32 +356,6 @@
       }
     },
     {
-      "name": "bootstrap-wysihtml5",
-      "benchmark": "JS-VS-TS-JS-Benchmark",
-      "avg_cc": NaN,
-      "avg_features_per_unit": NaN,
-      "no_units": 0,
-      "total_features": 0,
-      "github_link": "",
-      "features": {
-        "JS:Async": 0,
-        "JS:DynamicTyping": 0,
-        "JS:DomInteraction": 0,
-        "JS:NestedFunction": 0,
-        "JS:HigherOrder": 0,
-        "JS:CommonJS": 0,
-        "JS:ES6": 0,
-        "JS:Closures": 0,
-        "JS:Prototype": 0,
-        "JS:PropertyAccess": 0,
-        "JS:WeakTyping": 0,
-        "JS:VariadicParams": 0,
-        "JS:ImplicitGlobals": 0,
-        "JS:Undefined": 0,
-        "JS:ObjectManipulation": 0
-      }
-    },
-    {
       "name": "bootstrap",
       "benchmark": "JS-VS-TS-JS-Benchmark",
       "avg_cc": 1.103448275862069,
@@ -616,58 +564,6 @@
       }
     },
     {
-      "name": "BullshitGenerator",
-      "benchmark": "JS-VS-TS-JS-Benchmark",
-      "avg_cc": NaN,
-      "avg_features_per_unit": NaN,
-      "no_units": 0,
-      "total_features": 0,
-      "github_link": "",
-      "features": {
-        "JS:Async": 0,
-        "JS:DynamicTyping": 0,
-        "JS:DomInteraction": 0,
-        "JS:NestedFunction": 0,
-        "JS:HigherOrder": 0,
-        "JS:CommonJS": 0,
-        "JS:ES6": 0,
-        "JS:Closures": 0,
-        "JS:Prototype": 0,
-        "JS:PropertyAccess": 0,
-        "JS:WeakTyping": 0,
-        "JS:VariadicParams": 0,
-        "JS:ImplicitGlobals": 0,
-        "JS:Undefined": 0,
-        "JS:ObjectManipulation": 0
-      }
-    },
-    {
-      "name": "bxslider-4",
-      "benchmark": "JS-VS-TS-JS-Benchmark",
-      "avg_cc": NaN,
-      "avg_features_per_unit": NaN,
-      "no_units": 0,
-      "total_features": 0,
-      "github_link": "",
-      "features": {
-        "JS:Async": 0,
-        "JS:DynamicTyping": 0,
-        "JS:DomInteraction": 0,
-        "JS:NestedFunction": 0,
-        "JS:HigherOrder": 0,
-        "JS:CommonJS": 0,
-        "JS:ES6": 0,
-        "JS:Closures": 0,
-        "JS:Prototype": 0,
-        "JS:PropertyAccess": 0,
-        "JS:WeakTyping": 0,
-        "JS:VariadicParams": 0,
-        "JS:ImplicitGlobals": 0,
-        "JS:Undefined": 0,
-        "JS:ObjectManipulation": 0
-      }
-    },
-    {
       "name": "chalk",
       "benchmark": "JS-VS-TS-JS-Benchmark",
       "avg_cc": 1.875,
@@ -734,32 +630,6 @@
         "JS:NestedFunction": 0,
         "JS:HigherOrder": 0,
         "JS:CommonJS": 1,
-        "JS:ES6": 0,
-        "JS:Closures": 0,
-        "JS:Prototype": 0,
-        "JS:PropertyAccess": 0,
-        "JS:WeakTyping": 0,
-        "JS:VariadicParams": 0,
-        "JS:ImplicitGlobals": 0,
-        "JS:Undefined": 0,
-        "JS:ObjectManipulation": 0
-      }
-    },
-    {
-      "name": "co",
-      "benchmark": "JS-VS-TS-JS-Benchmark",
-      "avg_cc": NaN,
-      "avg_features_per_unit": NaN,
-      "no_units": 0,
-      "total_features": 0,
-      "github_link": "",
-      "features": {
-        "JS:Async": 0,
-        "JS:DynamicTyping": 0,
-        "JS:DomInteraction": 0,
-        "JS:NestedFunction": 0,
-        "JS:HigherOrder": 0,
-        "JS:CommonJS": 0,
         "JS:ES6": 0,
         "JS:Closures": 0,
         "JS:Prototype": 0,
@@ -1162,32 +1032,6 @@
       }
     },
     {
-      "name": "Flat-UI",
-      "benchmark": "JS-VS-TS-JS-Benchmark",
-      "avg_cc": NaN,
-      "avg_features_per_unit": NaN,
-      "no_units": 0,
-      "total_features": 0,
-      "github_link": "",
-      "features": {
-        "JS:Async": 0,
-        "JS:DynamicTyping": 0,
-        "JS:DomInteraction": 0,
-        "JS:NestedFunction": 0,
-        "JS:HigherOrder": 0,
-        "JS:CommonJS": 0,
-        "JS:ES6": 0,
-        "JS:Closures": 0,
-        "JS:Prototype": 0,
-        "JS:PropertyAccess": 0,
-        "JS:WeakTyping": 0,
-        "JS:VariadicParams": 0,
-        "JS:ImplicitGlobals": 0,
-        "JS:Undefined": 0,
-        "JS:ObjectManipulation": 0
-      }
-    },
-    {
       "name": "flux",
       "benchmark": "JS-VS-TS-JS-Benchmark",
       "avg_cc": 1.0,
@@ -1237,32 +1081,6 @@
         "JS:ImplicitGlobals": 1,
         "JS:Undefined": 1,
         "JS:ObjectManipulation": 1
-      }
-    },
-    {
-      "name": "front-end-collect",
-      "benchmark": "JS-VS-TS-JS-Benchmark",
-      "avg_cc": NaN,
-      "avg_features_per_unit": NaN,
-      "no_units": 0,
-      "total_features": 0,
-      "github_link": "",
-      "features": {
-        "JS:Async": 0,
-        "JS:DynamicTyping": 0,
-        "JS:DomInteraction": 0,
-        "JS:NestedFunction": 0,
-        "JS:HigherOrder": 0,
-        "JS:CommonJS": 0,
-        "JS:ES6": 0,
-        "JS:Closures": 0,
-        "JS:Prototype": 0,
-        "JS:PropertyAccess": 0,
-        "JS:WeakTyping": 0,
-        "JS:VariadicParams": 0,
-        "JS:ImplicitGlobals": 0,
-        "JS:Undefined": 0,
-        "JS:ObjectManipulation": 0
       }
     },
     {
@@ -1552,32 +1370,6 @@
       }
     },
     {
-      "name": "How-To-Ask-Questions-The-Smart-Way",
-      "benchmark": "JS-VS-TS-JS-Benchmark",
-      "avg_cc": NaN,
-      "avg_features_per_unit": NaN,
-      "no_units": 0,
-      "total_features": 0,
-      "github_link": "",
-      "features": {
-        "JS:Async": 0,
-        "JS:DynamicTyping": 0,
-        "JS:DomInteraction": 0,
-        "JS:NestedFunction": 0,
-        "JS:HigherOrder": 0,
-        "JS:CommonJS": 0,
-        "JS:ES6": 0,
-        "JS:Closures": 0,
-        "JS:Prototype": 0,
-        "JS:PropertyAccess": 0,
-        "JS:WeakTyping": 0,
-        "JS:VariadicParams": 0,
-        "JS:ImplicitGlobals": 0,
-        "JS:Undefined": 0,
-        "JS:ObjectManipulation": 0
-      }
-    },
-    {
       "name": "howler.js",
       "benchmark": "JS-VS-TS-JS-Benchmark",
       "avg_cc": 1.0,
@@ -1601,32 +1393,6 @@
         "JS:ImplicitGlobals": 1,
         "JS:Undefined": 1,
         "JS:ObjectManipulation": 1
-      }
-    },
-    {
-      "name": "husky",
-      "benchmark": "JS-VS-TS-JS-Benchmark",
-      "avg_cc": NaN,
-      "avg_features_per_unit": NaN,
-      "no_units": 0,
-      "total_features": 0,
-      "github_link": "",
-      "features": {
-        "JS:Async": 0,
-        "JS:DynamicTyping": 0,
-        "JS:DomInteraction": 0,
-        "JS:NestedFunction": 0,
-        "JS:HigherOrder": 0,
-        "JS:CommonJS": 0,
-        "JS:ES6": 0,
-        "JS:Closures": 0,
-        "JS:Prototype": 0,
-        "JS:PropertyAccess": 0,
-        "JS:WeakTyping": 0,
-        "JS:VariadicParams": 0,
-        "JS:ImplicitGlobals": 0,
-        "JS:Undefined": 0,
-        "JS:ObjectManipulation": 0
       }
     },
     {
@@ -1679,32 +1445,6 @@
         "JS:ImplicitGlobals": 1,
         "JS:Undefined": 1,
         "JS:ObjectManipulation": 1
-      }
-    },
-    {
-      "name": "javascript",
-      "benchmark": "JS-VS-TS-JS-Benchmark",
-      "avg_cc": NaN,
-      "avg_features_per_unit": NaN,
-      "no_units": 0,
-      "total_features": 0,
-      "github_link": "",
-      "features": {
-        "JS:Async": 0,
-        "JS:DynamicTyping": 0,
-        "JS:DomInteraction": 0,
-        "JS:NestedFunction": 0,
-        "JS:HigherOrder": 0,
-        "JS:CommonJS": 0,
-        "JS:ES6": 0,
-        "JS:Closures": 0,
-        "JS:Prototype": 0,
-        "JS:PropertyAccess": 0,
-        "JS:WeakTyping": 0,
-        "JS:VariadicParams": 0,
-        "JS:ImplicitGlobals": 0,
-        "JS:Undefined": 0,
-        "JS:ObjectManipulation": 0
       }
     },
     {
@@ -2095,58 +1835,6 @@
         "JS:ImplicitGlobals": 1,
         "JS:Undefined": 1,
         "JS:ObjectManipulation": 1
-      }
-    },
-    {
-      "name": "levelup",
-      "benchmark": "JS-VS-TS-JS-Benchmark",
-      "avg_cc": NaN,
-      "avg_features_per_unit": NaN,
-      "no_units": 0,
-      "total_features": 0,
-      "github_link": "",
-      "features": {
-        "JS:Async": 0,
-        "JS:DynamicTyping": 0,
-        "JS:DomInteraction": 0,
-        "JS:NestedFunction": 0,
-        "JS:HigherOrder": 0,
-        "JS:CommonJS": 0,
-        "JS:ES6": 0,
-        "JS:Closures": 0,
-        "JS:Prototype": 0,
-        "JS:PropertyAccess": 0,
-        "JS:WeakTyping": 0,
-        "JS:VariadicParams": 0,
-        "JS:ImplicitGlobals": 0,
-        "JS:Undefined": 0,
-        "JS:ObjectManipulation": 0
-      }
-    },
-    {
-      "name": "lib-flexible",
-      "benchmark": "JS-VS-TS-JS-Benchmark",
-      "avg_cc": NaN,
-      "avg_features_per_unit": NaN,
-      "no_units": 0,
-      "total_features": 0,
-      "github_link": "",
-      "features": {
-        "JS:Async": 0,
-        "JS:DynamicTyping": 0,
-        "JS:DomInteraction": 0,
-        "JS:NestedFunction": 0,
-        "JS:HigherOrder": 0,
-        "JS:CommonJS": 0,
-        "JS:ES6": 0,
-        "JS:Closures": 0,
-        "JS:Prototype": 0,
-        "JS:PropertyAccess": 0,
-        "JS:WeakTyping": 0,
-        "JS:VariadicParams": 0,
-        "JS:ImplicitGlobals": 0,
-        "JS:Undefined": 0,
-        "JS:ObjectManipulation": 0
       }
     },
     {
@@ -2826,32 +2514,6 @@
       }
     },
     {
-      "name": "nprogress",
-      "benchmark": "JS-VS-TS-JS-Benchmark",
-      "avg_cc": NaN,
-      "avg_features_per_unit": NaN,
-      "no_units": 0,
-      "total_features": 0,
-      "github_link": "",
-      "features": {
-        "JS:Async": 0,
-        "JS:DynamicTyping": 0,
-        "JS:DomInteraction": 0,
-        "JS:NestedFunction": 0,
-        "JS:HigherOrder": 0,
-        "JS:CommonJS": 0,
-        "JS:ES6": 0,
-        "JS:Closures": 0,
-        "JS:Prototype": 0,
-        "JS:PropertyAccess": 0,
-        "JS:WeakTyping": 0,
-        "JS:VariadicParams": 0,
-        "JS:ImplicitGlobals": 0,
-        "JS:Undefined": 0,
-        "JS:ObjectManipulation": 0
-      }
-    },
-    {
       "name": "nw.js",
       "benchmark": "JS-VS-TS-JS-Benchmark",
       "avg_cc": 4.5,
@@ -3086,32 +2748,6 @@
       }
     },
     {
-      "name": "qrcodejs",
-      "benchmark": "JS-VS-TS-JS-Benchmark",
-      "avg_cc": NaN,
-      "avg_features_per_unit": NaN,
-      "no_units": 0,
-      "total_features": 0,
-      "github_link": "",
-      "features": {
-        "JS:Async": 0,
-        "JS:DynamicTyping": 0,
-        "JS:DomInteraction": 0,
-        "JS:NestedFunction": 0,
-        "JS:HigherOrder": 0,
-        "JS:CommonJS": 0,
-        "JS:ES6": 0,
-        "JS:Closures": 0,
-        "JS:Prototype": 0,
-        "JS:PropertyAccess": 0,
-        "JS:WeakTyping": 0,
-        "JS:VariadicParams": 0,
-        "JS:ImplicitGlobals": 0,
-        "JS:Undefined": 0,
-        "JS:ObjectManipulation": 0
-      }
-    },
-    {
       "name": "quill",
       "benchmark": "JS-VS-TS-JS-Benchmark",
       "avg_cc": 2.238792676490886,
@@ -3190,32 +2826,6 @@
       }
     },
     {
-      "name": "react-developer-roadmap",
-      "benchmark": "JS-VS-TS-JS-Benchmark",
-      "avg_cc": NaN,
-      "avg_features_per_unit": NaN,
-      "no_units": 0,
-      "total_features": 0,
-      "github_link": "",
-      "features": {
-        "JS:Async": 0,
-        "JS:DynamicTyping": 0,
-        "JS:DomInteraction": 0,
-        "JS:NestedFunction": 0,
-        "JS:HigherOrder": 0,
-        "JS:CommonJS": 0,
-        "JS:ES6": 0,
-        "JS:Closures": 0,
-        "JS:Prototype": 0,
-        "JS:PropertyAccess": 0,
-        "JS:WeakTyping": 0,
-        "JS:VariadicParams": 0,
-        "JS:ImplicitGlobals": 0,
-        "JS:Undefined": 0,
-        "JS:ObjectManipulation": 0
-      }
-    },
-    {
       "name": "react-grid-layout",
       "benchmark": "JS-VS-TS-JS-Benchmark",
       "avg_cc": 1.0,
@@ -3230,32 +2840,6 @@
         "JS:NestedFunction": 0,
         "JS:HigherOrder": 0,
         "JS:CommonJS": 1,
-        "JS:ES6": 0,
-        "JS:Closures": 0,
-        "JS:Prototype": 0,
-        "JS:PropertyAccess": 0,
-        "JS:WeakTyping": 0,
-        "JS:VariadicParams": 0,
-        "JS:ImplicitGlobals": 0,
-        "JS:Undefined": 0,
-        "JS:ObjectManipulation": 0
-      }
-    },
-    {
-      "name": "react-hot-boilerplate",
-      "benchmark": "JS-VS-TS-JS-Benchmark",
-      "avg_cc": NaN,
-      "avg_features_per_unit": NaN,
-      "no_units": 0,
-      "total_features": 0,
-      "github_link": "",
-      "features": {
-        "JS:Async": 0,
-        "JS:DynamicTyping": 0,
-        "JS:DomInteraction": 0,
-        "JS:NestedFunction": 0,
-        "JS:HigherOrder": 0,
-        "JS:CommonJS": 0,
         "JS:ES6": 0,
         "JS:Closures": 0,
         "JS:Prototype": 0,
@@ -3291,32 +2875,6 @@
         "JS:ImplicitGlobals": 1,
         "JS:Undefined": 1,
         "JS:ObjectManipulation": 1
-      }
-    },
-    {
-      "name": "react-native",
-      "benchmark": "JS-VS-TS-JS-Benchmark",
-      "avg_cc": NaN,
-      "avg_features_per_unit": NaN,
-      "no_units": 0,
-      "total_features": 0,
-      "github_link": "",
-      "features": {
-        "JS:Async": 0,
-        "JS:DynamicTyping": 0,
-        "JS:DomInteraction": 0,
-        "JS:NestedFunction": 0,
-        "JS:HigherOrder": 0,
-        "JS:CommonJS": 0,
-        "JS:ES6": 0,
-        "JS:Closures": 0,
-        "JS:Prototype": 0,
-        "JS:PropertyAccess": 0,
-        "JS:WeakTyping": 0,
-        "JS:VariadicParams": 0,
-        "JS:ImplicitGlobals": 0,
-        "JS:Undefined": 0,
-        "JS:ObjectManipulation": 0
       }
     },
     {
@@ -3788,32 +3346,6 @@
       }
     },
     {
-      "name": "sheetjs",
-      "benchmark": "JS-VS-TS-JS-Benchmark",
-      "avg_cc": NaN,
-      "avg_features_per_unit": NaN,
-      "no_units": 0,
-      "total_features": 0,
-      "github_link": "",
-      "features": {
-        "JS:Async": 0,
-        "JS:DynamicTyping": 0,
-        "JS:DomInteraction": 0,
-        "JS:NestedFunction": 0,
-        "JS:HigherOrder": 0,
-        "JS:CommonJS": 0,
-        "JS:ES6": 0,
-        "JS:Closures": 0,
-        "JS:Prototype": 0,
-        "JS:PropertyAccess": 0,
-        "JS:WeakTyping": 0,
-        "JS:VariadicParams": 0,
-        "JS:ImplicitGlobals": 0,
-        "JS:Undefined": 0,
-        "JS:ObjectManipulation": 0
-      }
-    },
-    {
       "name": "shelljs",
       "benchmark": "JS-VS-TS-JS-Benchmark",
       "avg_cc": 4.916666666666667,
@@ -3967,32 +3499,6 @@
         "JS:ImplicitGlobals": 0,
         "JS:Undefined": 1,
         "JS:ObjectManipulation": 1
-      }
-    },
-    {
-      "name": "super-expressive",
-      "benchmark": "JS-VS-TS-JS-Benchmark",
-      "avg_cc": NaN,
-      "avg_features_per_unit": NaN,
-      "no_units": 0,
-      "total_features": 0,
-      "github_link": "",
-      "features": {
-        "JS:Async": 0,
-        "JS:DynamicTyping": 0,
-        "JS:DomInteraction": 0,
-        "JS:NestedFunction": 0,
-        "JS:HigherOrder": 0,
-        "JS:CommonJS": 0,
-        "JS:ES6": 0,
-        "JS:Closures": 0,
-        "JS:Prototype": 0,
-        "JS:PropertyAccess": 0,
-        "JS:WeakTyping": 0,
-        "JS:VariadicParams": 0,
-        "JS:ImplicitGlobals": 0,
-        "JS:Undefined": 0,
-        "JS:ObjectManipulation": 0
       }
     },
     {
@@ -4230,32 +3736,6 @@
       }
     },
     {
-      "name": "topojson",
-      "benchmark": "JS-VS-TS-JS-Benchmark",
-      "avg_cc": NaN,
-      "avg_features_per_unit": NaN,
-      "no_units": 0,
-      "total_features": 0,
-      "github_link": "",
-      "features": {
-        "JS:Async": 0,
-        "JS:DynamicTyping": 0,
-        "JS:DomInteraction": 0,
-        "JS:NestedFunction": 0,
-        "JS:HigherOrder": 0,
-        "JS:CommonJS": 0,
-        "JS:ES6": 0,
-        "JS:Closures": 0,
-        "JS:Prototype": 0,
-        "JS:PropertyAccess": 0,
-        "JS:WeakTyping": 0,
-        "JS:VariadicParams": 0,
-        "JS:ImplicitGlobals": 0,
-        "JS:Undefined": 0,
-        "JS:ObjectManipulation": 0
-      }
-    },
-    {
       "name": "tty.js",
       "benchmark": "JS-VS-TS-JS-Benchmark",
       "avg_cc": 2.4,
@@ -4386,32 +3866,6 @@
       }
     },
     {
-      "name": "unveil",
-      "benchmark": "JS-VS-TS-JS-Benchmark",
-      "avg_cc": NaN,
-      "avg_features_per_unit": NaN,
-      "no_units": 0,
-      "total_features": 0,
-      "github_link": "",
-      "features": {
-        "JS:Async": 0,
-        "JS:DynamicTyping": 0,
-        "JS:DomInteraction": 0,
-        "JS:NestedFunction": 0,
-        "JS:HigherOrder": 0,
-        "JS:CommonJS": 0,
-        "JS:ES6": 0,
-        "JS:Closures": 0,
-        "JS:Prototype": 0,
-        "JS:PropertyAccess": 0,
-        "JS:WeakTyping": 0,
-        "JS:VariadicParams": 0,
-        "JS:ImplicitGlobals": 0,
-        "JS:Undefined": 0,
-        "JS:ObjectManipulation": 0
-      }
-    },
-    {
       "name": "vue-cli",
       "benchmark": "JS-VS-TS-JS-Benchmark",
       "avg_cc": 1.536963601532567,
@@ -4539,32 +3993,6 @@
         "JS:ImplicitGlobals": 1,
         "JS:Undefined": 1,
         "JS:ObjectManipulation": 1
-      }
-    },
-    {
-      "name": "zoom.js",
-      "benchmark": "JS-VS-TS-JS-Benchmark",
-      "avg_cc": NaN,
-      "avg_features_per_unit": NaN,
-      "no_units": 0,
-      "total_features": 0,
-      "github_link": "",
-      "features": {
-        "JS:Async": 0,
-        "JS:DynamicTyping": 0,
-        "JS:DomInteraction": 0,
-        "JS:NestedFunction": 0,
-        "JS:HigherOrder": 0,
-        "JS:CommonJS": 0,
-        "JS:ES6": 0,
-        "JS:Closures": 0,
-        "JS:Prototype": 0,
-        "JS:PropertyAccess": 0,
-        "JS:WeakTyping": 0,
-        "JS:VariadicParams": 0,
-        "JS:ImplicitGlobals": 0,
-        "JS:Undefined": 0,
-        "JS:ObjectManipulation": 0
       }
     },
     {
@@ -5007,32 +4435,6 @@
         "JS:ImplicitGlobals": 1,
         "JS:Undefined": 1,
         "JS:ObjectManipulation": 1
-      }
-    },
-    {
-      "name": "notable",
-      "benchmark": "JS-VS-TS-TS-Benchmark",
-      "avg_cc": NaN,
-      "avg_features_per_unit": NaN,
-      "no_units": 0,
-      "total_features": 0,
-      "github_link": "",
-      "features": {
-        "JS:Async": 0,
-        "JS:DynamicTyping": 0,
-        "JS:DomInteraction": 0,
-        "JS:NestedFunction": 0,
-        "JS:HigherOrder": 0,
-        "JS:CommonJS": 0,
-        "JS:ES6": 0,
-        "JS:Closures": 0,
-        "JS:Prototype": 0,
-        "JS:PropertyAccess": 0,
-        "JS:WeakTyping": 0,
-        "JS:VariadicParams": 0,
-        "JS:ImplicitGlobals": 0,
-        "JS:Undefined": 0,
-        "JS:ObjectManipulation": 0
       }
     },
     {
@@ -5634,32 +5036,6 @@
       }
     },
     {
-      "name": "awesome-github-profile-readme",
-      "benchmark": "JS-VS-TS-Vue-Benchmark",
-      "avg_cc": NaN,
-      "avg_features_per_unit": NaN,
-      "no_units": 0,
-      "total_features": 0,
-      "github_link": "",
-      "features": {
-        "JS:Async": 0,
-        "JS:DynamicTyping": 0,
-        "JS:DomInteraction": 0,
-        "JS:NestedFunction": 0,
-        "JS:HigherOrder": 0,
-        "JS:CommonJS": 0,
-        "JS:ES6": 0,
-        "JS:Closures": 0,
-        "JS:Prototype": 0,
-        "JS:PropertyAccess": 0,
-        "JS:WeakTyping": 0,
-        "JS:VariadicParams": 0,
-        "JS:ImplicitGlobals": 0,
-        "JS:Undefined": 0,
-        "JS:ObjectManipulation": 0
-      }
-    },
-    {
       "name": "beekeeper-studio",
       "benchmark": "JS-VS-TS-Vue-Benchmark",
       "avg_cc": 2.602191810683661,
@@ -5709,32 +5085,6 @@
         "JS:ImplicitGlobals": 1,
         "JS:Undefined": 1,
         "JS:ObjectManipulation": 1
-      }
-    },
-    {
-      "name": "ColorUI",
-      "benchmark": "JS-VS-TS-Vue-Benchmark",
-      "avg_cc": NaN,
-      "avg_features_per_unit": NaN,
-      "no_units": 0,
-      "total_features": 0,
-      "github_link": "",
-      "features": {
-        "JS:Async": 0,
-        "JS:DynamicTyping": 0,
-        "JS:DomInteraction": 0,
-        "JS:NestedFunction": 0,
-        "JS:HigherOrder": 0,
-        "JS:CommonJS": 0,
-        "JS:ES6": 0,
-        "JS:Closures": 0,
-        "JS:Prototype": 0,
-        "JS:PropertyAccess": 0,
-        "JS:WeakTyping": 0,
-        "JS:VariadicParams": 0,
-        "JS:ImplicitGlobals": 0,
-        "JS:Undefined": 0,
-        "JS:ObjectManipulation": 0
       }
     },
     {
@@ -6102,32 +5452,6 @@
       }
     },
     {
-      "name": "mescroll",
-      "benchmark": "JS-VS-TS-Vue-Benchmark",
-      "avg_cc": NaN,
-      "avg_features_per_unit": NaN,
-      "no_units": 0,
-      "total_features": 0,
-      "github_link": "",
-      "features": {
-        "JS:Async": 0,
-        "JS:DynamicTyping": 0,
-        "JS:DomInteraction": 0,
-        "JS:NestedFunction": 0,
-        "JS:HigherOrder": 0,
-        "JS:CommonJS": 0,
-        "JS:ES6": 0,
-        "JS:Closures": 0,
-        "JS:Prototype": 0,
-        "JS:PropertyAccess": 0,
-        "JS:WeakTyping": 0,
-        "JS:VariadicParams": 0,
-        "JS:ImplicitGlobals": 0,
-        "JS:Undefined": 0,
-        "JS:ObjectManipulation": 0
-      }
-    },
-    {
       "name": "mint-ui",
       "benchmark": "JS-VS-TS-Vue-Benchmark",
       "avg_cc": 3.363636363636364,
@@ -6206,32 +5530,6 @@
       }
     },
     {
-      "name": "profile-summary-for-github",
-      "benchmark": "JS-VS-TS-Vue-Benchmark",
-      "avg_cc": NaN,
-      "avg_features_per_unit": NaN,
-      "no_units": 0,
-      "total_features": 0,
-      "github_link": "",
-      "features": {
-        "JS:Async": 0,
-        "JS:DynamicTyping": 0,
-        "JS:DomInteraction": 0,
-        "JS:NestedFunction": 0,
-        "JS:HigherOrder": 0,
-        "JS:CommonJS": 0,
-        "JS:ES6": 0,
-        "JS:Closures": 0,
-        "JS:Prototype": 0,
-        "JS:PropertyAccess": 0,
-        "JS:WeakTyping": 0,
-        "JS:VariadicParams": 0,
-        "JS:ImplicitGlobals": 0,
-        "JS:Undefined": 0,
-        "JS:ObjectManipulation": 0
-      }
-    },
-    {
       "name": "statping",
       "benchmark": "JS-VS-TS-Vue-Benchmark",
       "avg_cc": 1.0,
@@ -6246,32 +5544,6 @@
         "JS:NestedFunction": 0,
         "JS:HigherOrder": 0,
         "JS:CommonJS": 1,
-        "JS:ES6": 0,
-        "JS:Closures": 0,
-        "JS:Prototype": 0,
-        "JS:PropertyAccess": 0,
-        "JS:WeakTyping": 0,
-        "JS:VariadicParams": 0,
-        "JS:ImplicitGlobals": 0,
-        "JS:Undefined": 0,
-        "JS:ObjectManipulation": 0
-      }
-    },
-    {
-      "name": "tlroadmap",
-      "benchmark": "JS-VS-TS-Vue-Benchmark",
-      "avg_cc": NaN,
-      "avg_features_per_unit": NaN,
-      "no_units": 0,
-      "total_features": 0,
-      "github_link": "",
-      "features": {
-        "JS:Async": 0,
-        "JS:DynamicTyping": 0,
-        "JS:DomInteraction": 0,
-        "JS:NestedFunction": 0,
-        "JS:HigherOrder": 0,
-        "JS:CommonJS": 0,
         "JS:ES6": 0,
         "JS:Closures": 0,
         "JS:Prototype": 0,
@@ -7220,32 +6492,6 @@
       }
     },
     {
-      "name": "node-dirty",
-      "benchmark": "TestPilot-Benchmark",
-      "avg_cc": NaN,
-      "avg_features_per_unit": NaN,
-      "no_units": 0,
-      "total_features": 0,
-      "github_link": "",
-      "features": {
-        "JS:Async": 0,
-        "JS:DynamicTyping": 0,
-        "JS:DomInteraction": 0,
-        "JS:NestedFunction": 0,
-        "JS:HigherOrder": 0,
-        "JS:CommonJS": 0,
-        "JS:ES6": 0,
-        "JS:Closures": 0,
-        "JS:Prototype": 0,
-        "JS:PropertyAccess": 0,
-        "JS:WeakTyping": 0,
-        "JS:VariadicParams": 0,
-        "JS:ImplicitGlobals": 0,
-        "JS:Undefined": 0,
-        "JS:ObjectManipulation": 0
-      }
-    },
-    {
       "name": "node-fs-extra",
       "benchmark": "TestPilot-Benchmark",
       "avg_cc": 2.066666666666667,
@@ -7364,32 +6610,6 @@
         "JS:NestedFunction": 0,
         "JS:HigherOrder": 0,
         "JS:CommonJS": 1,
-        "JS:ES6": 0,
-        "JS:Closures": 0,
-        "JS:Prototype": 0,
-        "JS:PropertyAccess": 0,
-        "JS:WeakTyping": 0,
-        "JS:VariadicParams": 0,
-        "JS:ImplicitGlobals": 0,
-        "JS:Undefined": 0,
-        "JS:ObjectManipulation": 0
-      }
-    },
-    {
-      "name": "node-uneval",
-      "benchmark": "TestPilot-Benchmark",
-      "avg_cc": NaN,
-      "avg_features_per_unit": NaN,
-      "no_units": 0,
-      "total_features": 0,
-      "github_link": "",
-      "features": {
-        "JS:Async": 0,
-        "JS:DynamicTyping": 0,
-        "JS:DomInteraction": 0,
-        "JS:NestedFunction": 0,
-        "JS:HigherOrder": 0,
-        "JS:CommonJS": 0,
         "JS:ES6": 0,
         "JS:Closures": 0,
         "JS:Prototype": 0,

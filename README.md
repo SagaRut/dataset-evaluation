@@ -1,7 +1,7 @@
 # A Feature Diversity Static Analysis Tool for JS and TS projects/datasets
 
 ## Explorer
-You can explore the projects and their features on the [GitHub Pages](index.html) (if hosted).
+You can explore the projects and their features on the [GitHub Pages](https://sagarut.github.io/dataset-evaluation/).
 
 ## Usage
 1. Run the analysis (if needed).
