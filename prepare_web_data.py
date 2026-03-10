@@ -56,7 +56,7 @@ def generate_web_data():
                 project_name = clean_link.split("/")[-1]
                 repo_links[project_name.lower()] = clean_link
 
-    all_projects = []
+    seen_projects = {}
     features_set = set()
 
     for file in os.listdir(analysis_dir):
@@ -73,6 +73,8 @@ def generate_web_data():
                 # Remove "-Benchmark" or " Benchmark" part
                 benchmark_name = benchmark_name.replace("-Benchmark", "").replace(" Benchmark", "").replace("_Benchmark", "")
                 
+                repo_link = repo_links.get(clean_name.lower(), "")
+                
                 project_data = {
                     "name": clean_name,
                     "benchmark": benchmark_name,
@@ -80,7 +82,7 @@ def generate_web_data():
                     "avg_features_per_unit": row.get("Avg No. Features per unit", 0),
                     "no_units": row.get("No. Units", 0),
                     "features_covered": row.get("Features Covered", 0),
-                    "repo_link": repo_links.get(clean_name.lower(), ""),
+                    "repo_link": repo_link,
                     "features": {}
                 }
                 
@@ -100,8 +102,15 @@ def generate_web_data():
                         project_data["features"][col] = 1 if is_present else 0
                         features_set.add(col)
                 
-                all_projects.append(project_data)
+                # Check for duplicates based on name
+                if clean_name not in seen_projects:
+                    seen_projects[clean_name] = project_data
+                else:
+                    # If duplicate, prioritize the one with repo_link
+                    if not seen_projects[clean_name]["repo_link"] and project_data["repo_link"]:
+                        seen_projects[clean_name] = project_data
 
+    all_projects = list(seen_projects.values())
     output = {
         "features": sorted(list(features_set)),
         "projects": all_projects
