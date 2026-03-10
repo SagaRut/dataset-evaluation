@@ -39,7 +39,7 @@
                 <div class="mb-6">
                     <h3 class="font-medium mb-2">Features</h3>
                     <div id="feature-list" class="space-y-1 max-h-96 overflow-y-auto">
-                        <!-- Features will be populated here -->
+                        <!-- Features populated dynamically -->
                     </div>
                 </div>
                 
@@ -52,24 +52,34 @@
             <div class="md:col-span-3">
                 <div class="bg-white p-6 rounded-lg shadow mb-4">
                     <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-xl font-semibold">Results (<span id="count">0</span>)</h2>
-                        <div class="text-sm text-gray-500">
-                            Showing projects that match <span class="font-bold">ALL</span> selected features.
+                        <h2 class="text-xl font-semibold">
+                            Results (<span id="count">0</span>)
+                        </h2>
+
+                        <div class="flex items-center space-x-4">
+                            <div class="text-sm text-gray-500">
+                                Showing projects that match <span class="font-bold">ALL</span> selected features.
+                            </div>
+                            
+                            <button id="download-btn"
+                                class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded transition">
+                                Download Repository Links
+                            </button>
                         </div>
                     </div>
+
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Project</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Benchmark</th>
                                     <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Avg CC</th>
                                     <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Units</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">GitHub</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Link</th>
                                 </tr>
                             </thead>
                             <tbody id="results-body" class="bg-white divide-y divide-gray-200">
-                                <!-- Results will be populated here -->
+                                <!-- Results populated dynamically -->
                             </tbody>
                         </table>
                     </div>
@@ -80,6 +90,8 @@
 
     <script>
         let data = { features: [], projects: [] };
+        let currentFilteredProjects = [];
+
         const featureListEl = document.getElementById('feature-list');
         const resultsBodyEl = document.getElementById('results-body');
         const countEl = document.getElementById('count');
@@ -89,12 +101,21 @@
         async function loadData() {
             try {
                 const response = await fetch('web_data.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status} ${response.statusText}`);
+                }
                 data = await response.json();
                 populateFeatures();
                 renderResults();
             } catch (err) {
                 console.error('Error loading data:', err);
-                resultsBodyEl.innerHTML = '<tr><td colspan="5" class="px-4 py-4 text-center text-red-500">Error loading data. Make sure web_data.json is present.</td></tr>';
+                resultsBodyEl.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="px-4 py-4 text-center text-red-500">
+                            Error loading data: ${err.message}<br>
+                            Make sure <strong>web_data.json</strong> is present in the root directory.
+                        </td>
+                    </tr>`;
             }
         }
 
@@ -113,7 +134,8 @@
         }
 
         function getSelectedFeatures() {
-            return Array.from(document.querySelectorAll('.feature-checkbox:checked')).map(cb => cb.value);
+            return Array.from(document.querySelectorAll('.feature-checkbox:checked'))
+                .map(cb => cb.value);
         }
 
         function renderResults() {
@@ -121,7 +143,8 @@
             const minCC = parseFloat(minCCInput.value) || 0;
             const minUnits = parseInt(minUnitsInput.value) || 0;
 
-            const filteredProjects = data.projects.filter(project => {
+            currentFilteredProjects = data.projects.filter(project => {
+
                 // Feature filter (AND logic)
                 for (const feature of selectedFeatures) {
                     if (!project.features[feature]) return false;
@@ -134,36 +157,73 @@
                 return true;
             });
 
-            countEl.textContent = filteredProjects.length;
+            countEl.textContent = currentFilteredProjects.length;
             resultsBodyEl.innerHTML = '';
 
-            if (filteredProjects.length === 0) {
-                resultsBodyEl.innerHTML = '<tr><td colspan="5" class="px-4 py-4 text-center text-gray-500">No projects match the criteria.</td></tr>';
+            if (currentFilteredProjects.length === 0) {
+                resultsBodyEl.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="px-4 py-4 text-center text-gray-500">
+                            No projects match the criteria.
+                        </td>
+                    </tr>`;
                 return;
             }
 
-            filteredProjects.forEach(project => {
+            currentFilteredProjects.forEach(project => {
                 const row = document.createElement('tr');
                 row.className = 'hover:bg-gray-50';
                 row.innerHTML = `
-                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">${project.name}</td>
-                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">${project.benchmark}</td>
-                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 text-right">${project.avg_cc.toFixed(2)}</td>
-                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 text-right">${project.no_units}</td>
-                    <td class="px-4 py-3 whitespace-nowrap text-sm text-blue-600">
-                        ${project.github_link ? `<a href="${project.github_link}" target="_blank" class="hover:underline">Repo</a>` : '<span class="text-gray-400">N/A</span>'}
+                    <td class="px-4 py-3 text-sm font-medium text-gray-900">${project.name}</td>
+                    <td class="px-4 py-3 text-sm text-gray-500 text-right">${project.avg_cc.toFixed(2)}</td>
+                    <td class="px-4 py-3 text-sm text-gray-500 text-right">${project.no_units}</td>
+                    <td class="px-4 py-3 text-sm text-blue-600">
+                        ${project.github_link 
+                            ? `<a href="${project.github_link}" target="_blank" class="hover:underline">Repo</a>` 
+                            : '<span class="text-gray-400">N/A</span>'}
                     </td>
                 `;
                 resultsBodyEl.appendChild(row);
             });
         }
 
+        document.getElementById('download-btn').addEventListener('click', () => {
+            if (!currentFilteredProjects.length) {
+                alert("No repositories to download.");
+                return;
+            }
+
+            const links = currentFilteredProjects
+                .map(project => project.github_link)
+                .filter(link => link);
+
+            if (!links.length) {
+                alert("No GitHub links available in current results.");
+                return;
+            }
+
+            const fileContent = links.join('\n');
+            const blob = new Blob([fileContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'filtered_repositories.txt';
+            document.body.appendChild(a);
+            a.click();
+
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
         [minCCInput, minUnitsInput].forEach(input => {
             input.addEventListener('input', renderResults);
         });
 
         document.getElementById('reset-filters').addEventListener('click', () => {
-            document.querySelectorAll('.feature-checkbox').forEach(cb => cb.checked = false);
+            document.querySelectorAll('.feature-checkbox')
+                .forEach(cb => cb.checked = false);
+
             minCCInput.value = 0;
             minUnitsInput.value = 0;
             renderResults();
