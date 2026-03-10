@@ -6,23 +6,14 @@ import re
 
 ESLINT_CONFIG = "eslint.config.js"
 ESLINT_TYPESCRIPT_CONFIG = "eslint-ts.config.js"
-# OUTPUT_DIR = "results"
-OUTPUT_DIR = "test_results"
-BENCHMARK = "SynTest-Benchmark"
-# BENCHMARK = "TestPilot-Benchmark"
-# BENCHMARK = "JS-VS-TS-JS-Benchmark"
-# BENCHMARK = "JS-VS-TS-TS-Benchmark"
-# BENCHMARK = "JS-VS-TS-Vue-Benchmark"
-# BENCHMARK = "JS-Projects"
-# BENCHMARK = "WebStorm-Benchmark"
-# BENCHMARK = "test"
+OUTPUT_DIR = "evaluation_results"
+BENCHMARK = "JS-Projects"
 
 def install_eslint_and_plugins():
     """Ensure ESLint and required plugins are installed."""
     try:
         print("Checking and installing ESLint and plugins...")
         subprocess.run(["npm", "install", "-g", "eslint"], check=True, shell=True)
-        # npm install --save-dev eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin
         print("Installing the typescript parser.")
         subprocess.run(["npm", "install", "eslint", "@typescript-eslint/parser", "--save-dev"], check=True, shell=True)
         print("Installing the complexity plugin.")
@@ -211,15 +202,6 @@ def run_eslint_on_files(project, files):
 def reformat_data(results):
     json_data = []
     for result in results:
-        # Commented out code is for evaluations on all functions instead of only exported units
-        # # Union of all result["JS:<something>"] sets
-        # js_units = set()
-        # for key, value in result.items():
-        #     if key.startswith("JS:"):
-        #         js_units.update(value.keys())
-        # # Intersection of exported_units and all JS:* units
-        # intersection = set(result["exportedUnits"]) | js_units
-        # for unit in intersection:
         for unit in result["exportedUnits"]:
             loc = result["LOC"].get(unit, 0)  # Default LOC to 0 if not found
             if loc == 0:
@@ -373,8 +355,7 @@ def main():
                         files.append(os.path.join(root, file))
 
             print(f"Found {len(files)} files in project: {project_path}")
-            # if len(files) > 50:
-            #     continue
+
             # Run ESLint and save results
             results = run_eslint_on_files(project, files)
             reformatted_results = reformat_data(results)
