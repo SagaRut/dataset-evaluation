@@ -12,7 +12,6 @@ https://github.com/adam-p/markdown-here/commit/a7dd5c56daf58a278af4f2a05f41807ec
 https://github.com/mdx-js/mdx/commit/b3351fadcb6f78833a72757b7135dcfb8ab646fe
 https://github.com/louischatriot/nedb/commit/35be491ca67dbd4c6f75335f5f486307b192f2dc
 https://github.com/release-it/release-it/commit/183050c371acf290ea57dcea58649a63c16eb9e5
-https://github.com/GoogleChrome/samples/commit/c783da02a7162cff49f6683535fa1fd9d3906d1e
 https://github.com/janpaepke/ScrollMagic/commit/3ebcb179355fb8e882378f5f5b3b48639cf7e90b
 https://github.com/jlmakes/scrollreveal/commit/b5f4e01a655812e06b377fff497fc629c02002f3
 https://github.com/shelljs/shelljs/commit/4580c00398982618ff075dd4354b0234a1d679dc
