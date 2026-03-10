@@ -178,8 +178,8 @@
                     <td class="px-4 py-3 text-sm text-gray-500 text-right">${project.avg_cc.toFixed(2)}</td>
                     <td class="px-4 py-3 text-sm text-gray-500 text-right">${project.no_units}</td>
                     <td class="px-4 py-3 text-sm text-blue-600">
-                        ${project.github_link 
-                            ? `<a href="${project.github_link}" target="_blank" class="hover:underline">Repo</a>` 
+                        ${project.repo_link
+                            ? `<a href="${project.repo_link}" target="_blank" class="hover:underline">Repo</a>`
                             : '<span class="text-gray-400">N/A</span>'}
                     </td>
                 `;
@@ -194,11 +194,11 @@
             }
 
             const links = currentFilteredProjects
-                .map(project => project.github_link)
+                .map(project => project.repo_link)
                 .filter(link => link);
 
             if (!links.length) {
-                alert("No GitHub links available in current results.");
+                alert("No repository links available in current results.");
                 return;
             }
 
