@@ -13,10 +13,16 @@ The dataset consists of a curated list of JS and TS repositories. All projects a
 
 #### 2. Running the Evaluation Pipeline
 If you wish to execute the pipeline on your own set of repositories or modify the analysis criteria:
-1. **Repository Discovery:** Run `scripts/get_gh_repos.py` to populate `repos.txt` with potential GitHub repositories.
-2. **Cloning:** Execute `scripts/clone_repos.sh` to clone the discovered repositories.
-3. **Feature Analysis:** Run `evaluation_pipeline/evaluate.py` to analyze the complexity and language features of the collected projects.
-4. **Filtering:** Use `evaluation_pipeline/analyse_and_filter.py` to apply filtering criteria. The final project list with analysis metrics is stored in `filtered_projects_with_analysis_result.csv`.
+1. **Prerequisites:** Ensure you have Python (3.x), Node.js and npm installed.
+2. **Environment Setup:** Install the necessary Python and Node.js dependencies:
+   ```bash
+   pip install -r requirements.txt
+   npm install
+   ```
+2. **Repository Discovery:** Run `scripts/get_gh_repos.py` to populate `repos.txt` with potential GitHub repositories.
+3. **Cloning:** Execute `scripts/clone_repos.sh` to clone the discovered repositories.
+4. **Feature Analysis:** Run `evaluation_pipeline/evaluate.py` to analyze the complexity and language features of the collected projects.
+5. **Filtering:** Use `evaluation_pipeline/analyse_and_filter.py` to apply filtering criteria. The final project list with analysis metrics is stored in `filtered_projects_with_analysis_result.csv`.
 
 #### 3. Explorer
 The project includes a web-based explorer to visualize the dataset features. You can access it via `index.html` or the [GitHub Pages](https://sagarut.github.io/dataset-evaluation/) deployment.
