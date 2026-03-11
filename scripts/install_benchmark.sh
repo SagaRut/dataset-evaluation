@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-TARGET_DIR="Benchmark-Projects"
+TARGET_DIR="../Benchmark-Projects"
 LOG_FILE="install_benchmark.log"
 
 mkdir -p "$TARGET_DIR"

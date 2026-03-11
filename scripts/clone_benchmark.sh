@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPOS_FILE="benchmark.txt"
-TARGET_DIR="Benchmark-Projects"
+REPOS_FILE="../benchmark.txt"
+TARGET_DIR="../Benchmark-Projects"
 LOG_FILE="clone_benchmark.log"
 
 mkdir -p "$TARGET_DIR"

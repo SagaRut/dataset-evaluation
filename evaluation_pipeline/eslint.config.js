@@ -1,35 +1,25 @@
-import findUnits from "./eslint-plugins/find-units.js";
-import LOC from "./eslint-plugins/loc.js";
-import noBranches from "./eslint-plugins/no-branches.js";
-import containsAsync from "./eslint-plugins/contains-async.js";
-import containsDynamicTyping from "./eslint-plugins/contains-dynamic-typing.js";
-import containsDomInteraction from "./eslint-plugins/contains-dom.js";
-import containsNestedFunction from "./eslint-plugins/contains-nested-function.js";
-import containsHigherOrder from "./eslint-plugins/contains-higher-order.js";
-import containsCommonJS from "./eslint-plugins/contains-commonjs.js";
-import containsES6 from "./eslint-plugins/contains-es6.js";
-import containsClosures from "./eslint-plugins/contains-closures.js";
-import containsPrototype from "./eslint-plugins/contains-prototype.js";
-import containsPropertyAccess from "./eslint-plugins/contains-property-access.js";
-import containsWeakTyping from "./eslint-plugins/contains-weak-typing.js";
-import containsVariadicParams from "./eslint-plugins/contains-variadic-params.js";
-import containsImplicitGlobals from "./eslint-plugins/contains-implicit-globals.js";
-import containsUndefined from "./eslint-plugins/contains-undefined.js";
-import containsObjectManipulation from "./eslint-plugins/contains-object-manipulation.js";
+import findUnits from "../eslint-plugins/find-units.js";
+import LOC from "../eslint-plugins/loc.js";
+import noBranches from "../eslint-plugins/no-branches.js";
+import containsAsync from "../eslint-plugins/contains-async.js";
+import containsDynamicTyping from "../eslint-plugins/contains-dynamic-typing.js";
+import containsDomInteraction from "../eslint-plugins/contains-dom.js";
+import containsNestedFunction from "../eslint-plugins/contains-nested-function.js";
+import containsHigherOrder from "../eslint-plugins/contains-higher-order.js";
+import containsCommonJS from "../eslint-plugins/contains-commonjs.js";
+import containsES6 from "../eslint-plugins/contains-es6.js";
+import containsClosures from "../eslint-plugins/contains-closures.js";
+import containsPrototype from "../eslint-plugins/contains-prototype.js";
+import containsPropertyAccess from "../eslint-plugins/contains-property-access.js";
+import containsWeakTyping from "../eslint-plugins/contains-weak-typing.js";
+import containsVariadicParams from "../eslint-plugins/contains-variadic-params.js";
+import containsImplicitGlobals from "../eslint-plugins/contains-implicit-globals.js";
+import containsUndefined from "../eslint-plugins/contains-undefined.js";
+import containsObjectManipulation from "../eslint-plugins/contains-object-manipulation.js";
 import complexity from "eslint-plugin-complexity";
-import tseslint from 'typescript-eslint';
-import tsParser from "@typescript-eslint/parser";
 
-export default tseslint.config([
+export default [
   {
-    files: ["**/*.ts", "**/*.tsx"], // Apply to TypeScript files
-    languageOptions: {
-      parser: tsParser,
-      parserOptions: {
-        ecmaVersion: "latest", // Use the latest ECMAScript version
-        sourceType: "module", // Use 'module' for ES modules
-      },
-    },
     plugins: {
       "find-units": findUnits,
       complexity,
@@ -52,7 +42,7 @@ export default tseslint.config([
       "contains-object-manipulation": containsObjectManipulation,
     },
     rules: {
-      "find-units/find-units": "warn",   // Finding units
+      "find-units/find-units": "warn",   // Find units
       "complexity": ["error", { "max": 0 }], // Cyclomatic complexity
       "LOC/LOC": "error", // Lines of code
       "no-branches/count-branches": "error", // Number of branches
@@ -73,4 +63,4 @@ export default tseslint.config([
       "contains-object-manipulation/find-dynamic-object-manipulation": "error", // Contains examples of dynamic object manipulation
     },
   },
-]);
+];

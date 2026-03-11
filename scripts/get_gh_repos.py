@@ -28,8 +28,8 @@ def _parse_args() -> RepoQuery:
     p = argparse.ArgumentParser(
         description="Collect GitHub repository URLs (JavaScript only) using GitHub GraphQL Search."
     )
-    p.add_argument("--count", type=int, required=True, help="Number of repositories to collect.")
-    p.add_argument("--out", type=Path, required=True, help="Output .txt file path.")
+    p.add_argument("--count", type=int, default=50, help="Number of repositories to collect (default: 50).")
+    p.add_argument("--out", type=Path, default=Path("repos.txt"), help='Output .txt file path (default: "repos.txt").')
     p.add_argument("--min-stars", type=int, default=100, help="Minimum stargazers (default: 100).")
     p.add_argument("--page-size", type=int, default=20, help="GraphQL page size 1..100 (default: 20).")
     p.add_argument("--max-size-mb", type=int, default=None, help="Max repo size in MB (optional).")

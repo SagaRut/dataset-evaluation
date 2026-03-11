@@ -5,8 +5,8 @@ import pandas as pd
 import re
 
 def generate_web_data():
-    analysis_dir = "analysis_results"
-    github_links_file = "github_links.csv"
+    analysis_dir = "../analysis_results_all"
+    github_links_file = "../github_links.csv"
 
     repo_links = {}
     
@@ -22,9 +22,9 @@ def generate_web_data():
                 repo_links[project_name.lower()] = link
 
     benchmark_files = {
-        "JavaScriptRepos": "JavaScriptRepos.txt",
-        "TypeScriptRepos": "TypeScriptRepos.txt",
-        "VueRepos": "VueRepos.txt"
+        "../JavaScriptRepos": "JavaScriptRepos.txt",
+        "../TypeScriptRepos": "TypeScriptRepos.txt",
+        "../VueRepos": "VueRepos.txt"
     }
 
     for folder, filename in benchmark_files.items():
@@ -43,7 +43,7 @@ def generate_web_data():
                     print(f"Error decoding {file_path}")
 
     # 3. Load from TestPilot-Benchmark/clone.sh
-    testpilot_clone_sh = os.path.join("TestPilot-Benchmark", "clone.sh")
+    testpilot_clone_sh = os.path.join("../TestPilot-Benchmark", "clone.sh")
     if os.path.exists(testpilot_clone_sh):
         with open(testpilot_clone_sh, "r", encoding="utf-8") as f:
             content = f.read()

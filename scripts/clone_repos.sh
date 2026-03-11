@@ -2,7 +2,7 @@
 set -euo pipefail
 
 REPOS_FILE="repos.txt"
-TARGET_DIR="JS-Projects"
+TARGET_DIR="../JS-Projects"
 LOG_FILE="clone_repos.log"
 
 mkdir -p "$TARGET_DIR"

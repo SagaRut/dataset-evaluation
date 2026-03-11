@@ -3,8 +3,8 @@ from pathlib import Path
 import pandas as pd
 from collections import defaultdict
 
-evaluation_results_directory = "evaluation_results/"
-output_directory = "analysis_results/"
+evaluation_results_directory = "../evaluation_results/"
+output_directory = "../analysis_results/"
 
 FILTER_CC = 2
 FILTER_AVG_FEATURES = 3

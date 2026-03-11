@@ -6,8 +6,8 @@ import re
 
 ESLINT_CONFIG = "eslint.config.js"
 ESLINT_TYPESCRIPT_CONFIG = "eslint-ts.config.js"
-OUTPUT_DIR = "evaluation_results"
-BENCHMARK = "JS-Projects"
+OUTPUT_DIR = "../evaluation_results"
+BENCHMARK = "../JS-Projects"
 
 def install_eslint_and_plugins():
     """Ensure ESLint and required plugins are installed."""
@@ -334,10 +334,16 @@ def save_averages_to_file(averages, json_file, csv_file):
         writer.writerows(averages)
 
 def main():
+    # Ensure the output directory exists
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+
     # Ensure npm packages are installed
     install_eslint_and_plugins()
 
     all_results = []
+
+    # Extract benchmark name from BENCHMARK path
+    benchmark_name = os.path.basename(BENCHMARK.rstrip("/\\"))
 
     # Iterate over projects in the directory
     for project in os.listdir(BENCHMARK):
@@ -361,13 +367,13 @@ def main():
             reformatted_results = reformat_data(results)
             all_results.extend(reformatted_results)
 
-            json_file = f"eslint_results_{BENCHMARK}_{project}.json"
-            csv_file = f"eslint_results_{BENCHMARK}_{project}.csv"
+            json_file = f"eslint_results_{benchmark_name}_{project}.json"
+            csv_file = f"eslint_results_{benchmark_name}_{project}.csv"
             save_results_to_file(results, reformatted_results, json_file, csv_file)
     # Calculate averages across all projects
     averages = calculate_average_results(all_results)
     # Save average results
-    save_averages_to_file(averages, f"average_results_{BENCHMARK}.json", f"average_results_{BENCHMARK}.csv")
+    save_averages_to_file(averages, f"average_results_{benchmark_name}.json", f"average_results_{benchmark_name}.csv")
 
 if __name__ == "__main__":
     main()
