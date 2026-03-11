@@ -100,7 +100,7 @@
 
         async function loadData() {
             try {
-                const response = await fetch('web_data.json');
+                const response = await fetch('web_explorer/web_data.json');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status} ${response.statusText}`);
                 }
