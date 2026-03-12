@@ -33,7 +33,7 @@ https://github.com/slab/delta/commit/dc17ca03e1d68ee729c8cd1ff790ebf96eb0fbec
 https://github.com/fshost/node-dir/commit/a57c3b1b571dd91f464ae398090ba40f64ba38a2
 https://github.com/isaacs/node-glob/commit/fd61f2410b4356f202f645661cfa175152702ae6
 https://github.com/isaacs/node-graceful-fs/commit/234379906b7d2f4c9cfeb412d2516f42b0fb4953
-https://gitlab.com/cptpackrat/spacl-core/commit/fcb8511a0d01bdc206582cfacb3e2b01a0288f6a
+https://gitlab.com/cptpackrat/spacl-core/-/commit/fcb8511a0d01bdc206582cfacb3e2b01a0288f6a
 https://github.com/maugenst/zip-a-folder/commit/9e7565abf8355c54b654f261a8084b4305e9e119
 https://github.com/snuffyDev/Beatbump/commit/d00ed3e10a13ec82a6a006dd02bf9548544d1ab3
 https://github.com/pablo-abc/felte/commit/ab1ae409ec99d36fa08a8cbe1a8de4e2fda84ccf
