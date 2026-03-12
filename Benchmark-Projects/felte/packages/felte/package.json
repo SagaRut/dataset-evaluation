@@ -1,0 +1,60 @@
+{
+  "name": "felte",
+  "version": "1.3.0",
+  "description": "An extensible form library for Svelte",
+  "main": "dist/cjs/index.cjs",
+  "browser": "dist/esm/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "type": "module",
+  "engines": {
+    "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
+  },
+  "sideEffects": false,
+  "author": {
+    "name": "Pablo Berganza",
+    "url": "https://pablo.berganza.dev"
+  },
+  "license": "MIT",
+  "homepage": "https://felte.dev",
+  "repository": "github:pablo-abc/felte",
+  "keywords": [
+    "svelte",
+    "forms",
+    "validation"
+  ],
+  "scripts": {
+    "prebuild": "rimraf ./dist",
+    "build": "pnpm prebuild && cross-env NODE_ENV=production rollup -c",
+    "docs:build": "typedoc --out ../../docs",
+    "dev": "rollup -cw",
+    "prepublishOnly": "pnpm build && pnpm test",
+    "vitest": "vitest",
+    "test": "vitest run",
+    "test:ci": "vitest run --coverage"
+  },
+  "peerDependencies": {
+    "svelte": "^3.31.0 || ^4.0.0 || ^5.0.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@felte/core": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "svelte": "^3.53.1"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/esm/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.cjs",
+      "default": "./dist/esm/index.js"
+    },
+    "./package.json": "./package.json"
+  }
+}

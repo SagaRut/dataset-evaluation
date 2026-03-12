@@ -1,0 +1,56 @@
+{
+  "name": "@felte/common",
+  "version": "1.1.9",
+  "description": "Common utilities for Felte packages",
+  "author": {
+    "name": "Pablo Berganza",
+    "url": "https://pablo.berganza.dev"
+  },
+  "homepage": "https://github.com/pablo-abc/felte/tree/main/packages/common",
+  "license": "MIT",
+  "main": "dist/cjs/index.cjs",
+  "browser": "dist/esm/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "type": "module",
+  "engines": {
+    "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
+  },
+  "sideEffects": false,
+  "keywords": [
+    "svelte",
+    "forms",
+    "utility"
+  ],
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/pablo-abc/felte.git"
+  },
+  "scripts": {
+    "prebuild": "rimraf ./dist",
+    "build": "pnpm prebuild && cross-env NODE_ENV=production rollup -c",
+    "dev": "rollup -cw",
+    "prepublishOnly": "pnpm build && pnpm test",
+    "vitest": "vitest",
+    "test": "vitest run",
+    "test:ci": "vitest run --coverage"
+  },
+  "bugs": {
+    "url": "https://github.com/pablo-abc/felte/issues"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/esm/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.cjs",
+      "default": "./dist/esm/index.js"
+    },
+    "./package.json": "./package.json"
+  }
+}

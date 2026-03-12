@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "types": ["vite/client", "@testing-library/jest-dom"],
+    "target": "es2017",
+    "newLine": "LF",
+    "moduleResolution": "node",
+    "strict": true,
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "outDir": "./dist",
+    "module": "esnext"
+  },
+  "include": ["./src", "./tests"],
+  "exclude": ["node_modules/"]
+}

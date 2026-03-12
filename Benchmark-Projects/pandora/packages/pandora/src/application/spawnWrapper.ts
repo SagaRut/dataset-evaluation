@@ -1,0 +1,42 @@
+'use strict';
+
+const wrap = require('pandora-spawn-wrap');
+import {MonitorManager} from '../monitor/MonitorManager';
+import {SpawnWrapperUtils} from './SpawnWrapperUtils';
+import {Facade} from '../Facade';
+
+async function main () {
+
+  SpawnWrapperUtils.increaseLevel();
+
+  if(!SpawnWrapperUtils.decideFollow()) {
+    // unwrap it
+    if(wrap.lastUnwrap) {
+      wrap.lastUnwrap(true);
+    }
+  }
+
+  if(process.argv[2].endsWith('/npm')) {
+    wrap.runMain();
+    return;
+  }
+
+  try {
+    const context = SpawnWrapperUtils.shimProcessContext();
+    Facade.set('processContext', context.processContextAccessor);
+    // Make sure start IPC Hub at very beginning, be course of injectMonitor() needs
+    if(!process.env.SKIP_IPC_HUB) {
+      const ipcHub = context.getIPCHub();
+      await ipcHub.start();
+      await ipcHub.initConfigClient();
+    }
+    MonitorManager.injectProcessMonitor();
+    await context.start();
+  } catch (err) {
+    console.error(err);
+  }
+  wrap.runMain();
+
+}
+
+main().catch(console.error);

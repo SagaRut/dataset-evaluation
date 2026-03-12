@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "target": "es2019",
+    "types": ["@testing-library/jest-dom"],
+    "module": "ES2015",
+    "lib": ["ES2019", "dom"],
+    "useDefineForClassFields": false,
+    "isolatedModules": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    "jsx": "react"
+  },
+  "include": ["./src", "./tests"],
+  "exclude": ["./tests"]
+}

@@ -1,0 +1,17 @@
+{
+  "type": "module",
+  "version": "7.3.2",
+  "private": true,
+  "scripts": {
+    "docs:build": "vitepress build",
+    "docs:dev": "vitepress dev",
+    "docs:preview": "vitepress preview"
+  },
+  "devDependencies": {
+    "@unocss/reset": "catalog:",
+    "@vueuse/core": "catalog:",
+    "unplugin-vue-components": "^28.4.1",
+    "vitepress": "1.6.3",
+    "vue": "catalog:"
+  }
+}

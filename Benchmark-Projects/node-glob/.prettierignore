@@ -1,0 +1,15 @@
+/.github
+/.tap
+/node_modules
+/tap-snapshots
+
+/scripts/fixtures
+/.tap
+/.tshy
+/dist
+/docs
+/example
+/node_modules
+/tap-snapshots
+/test/**/fixture
+/test/**/fixtures
